@@ -1,12 +1,13 @@
 <script lang="ts">
+	import DetailedTeam from './DetailedTeam.svelte';
 	import type ITeam from './ITeam';
 	import teamData from './teams.json';
+	import { selectedTeam, showTeamDetails } from './store/store';
 	const listedTeams: ITeam[] = teamData;
 
-	let selectedTeam = null;
-
 	function openTeamModal(team: ITeam) {
-		selectedTeam = team;
+		$selectedTeam = team;
+		$showTeamDetails = true;
 	}
 </script>
 
@@ -31,26 +32,31 @@
 					><button
 						on:click={() => {
 							openTeamModal(team);
-						}}><img src="./src/assets/bx-football.svg" alt="See" /></button
+						}}><img src="./src/assets/bx-football.png" alt="See" /></button
 					><button
 						on:click={() => {
 							openTeamModal(team);
-						}}><img src="./src/assets/bx-edit.svg" alt="Edit" /></button
+						}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
 					><button
 						on:click={() => {
 							openTeamModal(team);
-						}}><img src="./src/assets/bx-trash.svg" alt="Delete" /></button
+						}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
 					>
 				</td></tr
 			>
 		{/each}
 	</table>
+	{#if $showTeamDetails}
+		<DetailedTeam team={$selectedTeam} />
+	{/if}
 </main>
 
 <style>
 	.crud-clubs-team-logo {
 		height: 40px;
 		box-sizing: border-box;
+		display: flex;
+		align-items: center;
 	}
 	main {
 		color: #f7ebe8;
