@@ -1,20 +1,62 @@
 <script lang="ts">
-	import DetailedTeam from './DetailedTeam.svelte';
 	import type ITeam from './ITeam';
 	import teamData from './teams.json';
-	import { selectedTeam, showTeamDetails } from './store/store';
+	import { selectedTeam, showTeamModal, showAlertModal, editableTeam } from './store/store';
+	import AlertModal from './AlertModal.svelte';
+	import TeamModal from './TeamModal.svelte';
 	const listedTeams: ITeam[] = teamData;
-
-	function openTeamModal(team: ITeam) {
+	const newTeam: ITeam = {
+		id: 0,
+		area: {
+			id: 0,
+			name: ''
+		},
+		name: '',
+		shortName: '',
+		tla: '',
+		crestUrl: '',
+		address: '',
+		phone: '',
+		website: '',
+		email: '',
+		founded: 0,
+		clubColors: '',
+		venue: '',
+		lastUpdated: ''
+	};
+	function handleSeeTeam(team: ITeam) {
 		$selectedTeam = team;
-		$showTeamDetails = true;
+		$editableTeam = false;
+		$showTeamModal = true;
+	}
+	function handleEditTeam(team: ITeam) {
+		$selectedTeam = team;
+		$editableTeam = true;
+		$showTeamModal = true;
+	}
+
+	function toggleAlertModal() {
+		$showAlertModal = !$showAlertModal;
+		console.log($showAlertModal);
+	}
+
+	function handleDelete(team: ITeam) {
+		toggleAlertModal();
+		$selectedTeam = team;
 	}
 </script>
 
 <main>
 	<h1 class="crud-clubs-title">English Clubs</h1>
-	<p>Currently you have {listedTeams.length} teams listed!</p>
-	<button class="crud-clubs-add-team-btn">Add Team</button>
+	<div class="crud-clubs-team-info">
+		<p>Currently you have {listedTeams.length} teams listed!</p>
+		<button
+			class="crud-clubs-add-team-btn"
+			on:click={() => {
+				handleEditTeam(newTeam);
+			}}>Add Team</button
+		>
+	</div>
 	<table class="crud-clubs-teams-table">
 		<tr class="crud-clubs-team-table-head">
 			<th class="crud-clubs-team-logo-container">Escudo</th>
@@ -31,32 +73,44 @@
 				<td class="crud-clubs-actions-container"
 					><button
 						on:click={() => {
-							openTeamModal(team);
+							handleSeeTeam(team);
 						}}><img src="./src/assets/bx-football.png" alt="See" /></button
 					><button
 						on:click={() => {
-							openTeamModal(team);
+							handleEditTeam(team);
 						}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
 					><button
 						on:click={() => {
-							openTeamModal(team);
+							handleDelete(team);
 						}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
 					>
 				</td></tr
 			>
 		{/each}
 	</table>
-	{#if $showTeamDetails}
-		<DetailedTeam team={$selectedTeam} />
+	{#if $showTeamModal}
+		<TeamModal
+			team={$selectedTeam}
+			deleteAction={() => {
+				handleDelete($selectedTeam);
+			}}
+			editAction={() => {
+				handleEditTeam($selectedTeam);
+			}}
+		/>
+	{/if}
+	{#if $showAlertModal}
+		<AlertModal toggleModal={() => toggleAlertModal()} />
 	{/if}
 </main>
 
 <style>
 	.crud-clubs-team-logo {
-		height: 40px;
+		height: 35px;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
+		object-fit: scale-down;
 	}
 	main {
 		color: #f7ebe8;
