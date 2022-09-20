@@ -1,19 +1,33 @@
 <script lang="ts">
 	import type ITeam from './ITeam';
-	import { saveTeam } from './services/crud-clubs';
-	import { showTeamModal, editableTeam, selectedTeam } from './store/store';
+	import { addTeam, addTeamCreast, deleteTeam, updateTeam } from './services/crud-clubs';
+	import {
+		showTeamModal,
+		editableTeam,
+		selectedTeam,
+		newTeam,
+		showAlertModal
+	} from './store/store';
 
 	export let team: ITeam;
 	export let editAction: () => void;
 	export let deleteAction: () => void;
 
-	export async function handleSaveTeam($selectedTeam: ITeam) {
+	async function handleSaveTeam($selectedTeam: ITeam) {
 		try {
-			await saveTeam($selectedTeam);
+			$newTeam ? await addTeam($selectedTeam) : await updateTeam($selectedTeam);
 		} catch (e) {
 			console.error(e);
 		}
 	}
+
+	async function handleAddTeamCreast(e) {
+		const teamCrest = e.target.files;
+		const crestFile = new FormData();
+		crestFile.append('crest', teamCrest[0]);
+		await addTeamCreast(crestFile);
+	}
+	let hi: string;
 </script>
 
 <button
@@ -30,12 +44,17 @@
 				{#if team.crestUrl} <img src={team.crestUrl} alt="" />{/if}
 			</div>
 			{#if $editableTeam}
-				<form class="crud-clubs-team-logo-form">
-					<input
-						class="crud-clubs-add-logo-input"
-						placeholder={team.crestUrl ? "Update this team's logo" : 'Add a new logo'}
-					/><button class="crud-clubs-add-logo-btn">Add</button>
-				</form>
+				<input
+					on:change={(e) => {
+						handleAddTeamCreast(e);
+					}}
+					class="crud-clubs-add-logo-input form-control-file"
+					type="file"
+					name="crest"
+					required
+					bind:value={hi}
+					placeholder={team.crestUrl ? "Update this team's logo" : 'Add a new logo'}
+				/>
 			{/if}
 		</div>
 		<div class="crud-clubs-team-details">
@@ -125,8 +144,8 @@
 		position: fixed;
 		height: 15px;
 		width: 15px;
-		top: 12%;
-		right: 25%;
+		top: 15%;
+		right: 24%;
 		z-index: 4;
 	}
 	.crud-clubs-team-info-container {
@@ -167,7 +186,7 @@
 		align-items: center;
 	}
 	.crud-clubs-add-logo-input {
-		width: 70%;
+		width: 65%;
 		margin: 10px;
 	}
 	.crud-clubs-add-logo-btn {
@@ -189,11 +208,12 @@
 		margin: 2px 0px;
 	}
 	input {
+		background-color: #716c6a;
 		color: #f7ebe8;
 		border: none;
 		border-radius: 5px;
 		height: 25px;
-		padding: 3px;
+		padding: 3px 10px;
 		font-family: 'Montserrat';
 	}
 	.crud-clubs-btn-container {
