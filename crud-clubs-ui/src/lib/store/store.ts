@@ -5,3 +5,4 @@ export const selectedTeam: Writable<ITeam> = writable();
 export const showTeamModal = writable(false);
 export const showAlertModal = writable(false);
 export const editableTeam = writable(false);
+export const newTeam = writable(false);
