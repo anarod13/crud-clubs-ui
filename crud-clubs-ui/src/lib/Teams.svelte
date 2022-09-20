@@ -58,13 +58,6 @@
 		toggleAlertModal();
 		$selectedTeam = team;
 	}
-	async function handleDeleteTeam($selectedTeam: ITeam) {
-		try {
-			await deleteTeam($selectedTeam);
-		} catch (e) {
-			console.error(e);
-		}
-	}
 </script>
 
 <main>
