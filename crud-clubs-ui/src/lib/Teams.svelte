@@ -1,11 +1,17 @@
 <script lang="ts">
 	import type ITeam from './ITeam';
-	import teamData from './teams.json';
-	import { selectedTeam, showTeamModal, showAlertModal, editableTeam } from './store/store';
+	import {
+		selectedTeam,
+		showTeamModal,
+		showAlertModal,
+		editableTeam,
+		newTeam
+	} from './store/store';
 	import AlertModal from './AlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
-	const listedTeams: ITeam[] = teamData;
-	const newTeam: ITeam = {
+	import { getTeams, deleteTeam } from './services/crud-clubs';
+	const listedTeams: Promise<ITeam[]> = getTeams();
+	const newTeams: ITeam = {
 		id: 0,
 		area: {
 			id: 0,
@@ -19,11 +25,18 @@
 		phone: '',
 		website: '',
 		email: '',
-		founded: 0,
+		founded: null,
 		clubColors: '',
 		venue: '',
 		lastUpdated: ''
 	};
+
+	function handleAddTeam() {
+		$selectedTeam = newTeams;
+		$editableTeam = true;
+		$showTeamModal = true;
+		$newTeam = true;
+	}
 	function handleSeeTeam(team: ITeam) {
 		$selectedTeam = team;
 		$editableTeam = false;
@@ -33,6 +46,7 @@
 		$selectedTeam = team;
 		$editableTeam = true;
 		$showTeamModal = true;
+		$newTeam = false;
 	}
 
 	function toggleAlertModal() {
@@ -44,55 +58,64 @@
 		toggleAlertModal();
 		$selectedTeam = team;
 	}
+	async function handleDeleteTeam($selectedTeam: ITeam) {
+		try {
+			await deleteTeam($selectedTeam);
+		} catch (e) {
+			console.error(e);
+		}
+	}
 </script>
 
 <main>
-	<h1 class="crud-clubs-title">English Clubs</h1>
-	<div class="crud-clubs-team-info">
-		<p>Currently you have {listedTeams.length} teams listed!</p>
-		<button
-			class="crud-clubs-add-team-btn"
-			on:click={() => {
-				handleEditTeam(newTeam);
-			}}>Add Team</button
-		>
-	</div>
-	<table class="crud-clubs-teams-table">
-		<tr class="crud-clubs-team-table-head">
-			<th class="crud-clubs-team-logo-container">Escudo</th>
-			<th class="crud-clubs-team-name">Team</th>
-
-			<th class="crud-clubs-actions-container">Actions</th>
-		</tr>
-		{#each listedTeams as team}
-			<tr class="crud-clubs-team-row">
-				<td class="crud-clubs-team-logo-container"
-					><img class="crud-clubs-team-logo" src={team.crestUrl} alt={team.tla} /></td
-				>
-				<td class="crud-clubs-team-name">{team.name}</td>
-				<td class="crud-clubs-actions-container"
-					><button
-						on:click={() => {
-							handleSeeTeam(team);
-						}}><img src="./src/assets/bx-football.png" alt="See" /></button
-					><button
-						on:click={() => {
-							handleEditTeam(team);
-						}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
-					><button
-						on:click={() => {
-							handleDelete(team);
-						}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
-					>
-				</td></tr
+	<h1 class="crud-clubs-title">Premiere League</h1>
+	{#await listedTeams then teams}
+		<div class="crud-clubs-team-info">
+			<p>Currently you have {teams.length} teams listed</p>
+			<button
+				class="crud-clubs-add-team-btn"
+				on:click={() => {
+					handleAddTeam();
+				}}>Add Team</button
 			>
-		{/each}
-	</table>
+		</div>
+		<table class="crud-clubs-teams-table">
+			<tr class="crud-clubs-team-table-head">
+				<th class="crud-clubs-team-logo-container">Escudo</th>
+				<th class="crud-clubs-team-name">Team</th>
+
+				<th class="crud-clubs-actions-container">Actions</th>
+			</tr>
+			{#each teams as team}
+				<tr class="crud-clubs-team-row">
+					<td class="crud-clubs-team-logo-container"
+						><img class="crud-clubs-team-logo" src={team.crestUrl} alt={team.tla} /></td
+					>
+					<td class="crud-clubs-team-name">{team.name}</td>
+					<td class="crud-clubs-actions-container"
+						><button
+							on:click={() => {
+								handleSeeTeam(team);
+							}}><img src="./src/assets/bx-football.png" alt="See" /></button
+						><button
+							on:click={() => {
+								handleEditTeam(team);
+							}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
+						><button
+							on:click={() => {
+								handleDelete(team);
+							}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
+						>
+					</td></tr
+				>
+			{/each}
+		</table>
+	{/await}
 	{#if $showTeamModal}
 		<TeamModal
 			team={$selectedTeam}
 			deleteAction={() => {
-				handleDelete($selectedTeam);
+				$newTeam ? handleAddTeam() : handleDelete($selectedTeam);
 			}}
 			editAction={() => {
 				handleEditTeam($selectedTeam);
