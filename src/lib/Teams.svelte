@@ -10,7 +10,8 @@
 	import AlertModal from './AlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
 	import { getTeams, deleteTeam } from './services/crud-clubs';
-	const listedTeams: Promise<ITeam[]> = getTeams();
+	import type { IListedTeam } from './IListedTeam';
+	const listedTeams: Promise<IListedTeam[]> = getTeams();
 	const newTeams: ITeam = {
 		id: 0,
 		area: {
@@ -37,12 +38,12 @@
 		$showTeamModal = true;
 		$newTeam = true;
 	}
-	function handleSeeTeam(team: ITeam) {
+	function handleSeeTeam(team: number) {
 		$selectedTeam = team;
 		$editableTeam = false;
 		$showTeamModal = true;
 	}
-	function handleEditTeam(team: ITeam) {
+	function handleEditTeam(team: number) {
 		$selectedTeam = team;
 		$editableTeam = true;
 		$showTeamModal = true;
@@ -54,7 +55,7 @@
 		console.log($showAlertModal);
 	}
 
-	function handleDelete(team: ITeam) {
+	function handleDelete(team: number) {
 		toggleAlertModal();
 		$selectedTeam = team;
 	}
@@ -74,29 +75,27 @@
 		</div>
 		<table class="crud-clubs-teams-table">
 			<tr class="crud-clubs-team-table-head">
-				<th class="crud-clubs-team-logo-container">Escudo</th>
-				<th class="crud-clubs-team-name">Team</th>
+				<th class="crud-clubs-team-logo-container">Team</th>
+				<th class="crud-clubs-team-name">Country</th>
 
 				<th class="crud-clubs-actions-container">Actions</th>
 			</tr>
 			{#each teams as team}
 				<tr class="crud-clubs-team-row">
-					<td class="crud-clubs-team-logo-container"
-						><img class="crud-clubs-team-logo" src={team.crestUrl} alt={team.tla} /></td
-					>
 					<td class="crud-clubs-team-name">{team.name}</td>
+					<td class="crud-clubs-team-name">{team.country}</td>
 					<td class="crud-clubs-actions-container"
 						><button
 							on:click={() => {
-								handleSeeTeam(team);
+								handleSeeTeam(team.id);
 							}}><img src="./src/assets/bx-football.png" alt="See" /></button
 						><button
 							on:click={() => {
-								handleEditTeam(team);
+								handleEditTeam(team.id);
 							}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
 						><button
 							on:click={() => {
-								handleDelete(team);
+								handleDelete(team.id);
 							}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
 						>
 					</td></tr

@@ -1,9 +1,12 @@
 import type { INewCrest } from '../INewCrest';
 import type ITeam from '../../lib/ITeam';
+import type Team from '../Team';
+import { mapsTeam } from '../mappers/teamMapper';
+import type { IListedTeam } from '$lib/IListedTeam';
 
 const SERVER_URL = 'http://localhost:8080';
 
-export async function getTeams(): Promise<ITeam[]> {
+export async function getTeams(): Promise<IListedTeam[]> {
 	const result = await fetch(`${SERVER_URL}`, {
 		method: 'GET',
 		headers: {
@@ -14,6 +17,17 @@ export async function getTeams(): Promise<ITeam[]> {
 	return result.json();
 }
 
+export async function getTeam(teamId: number): Promise<Team> {
+	const result = await fetch(`${SERVER_URL}/${teamId}`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		}
+	});
+	const teamData = await result.json();
+	return mapsTeam(teamData);
+}
 export async function addTeam(team: ITeam) {
 	const result = await fetch(`${SERVER_URL}/add`, {
 		method: 'POST',
@@ -51,13 +65,38 @@ export async function deleteTeam(team: ITeam) {
 }
 
 export async function addTeamCreast(teamCrest: INewCrest) {
-	await fetch(`${SERVER_URL}/${teamCrest.id}/upload-crest`, {
+	const response = await fetch(`${SERVER_URL}/${teamCrest.id}/upload-crest`, {
 		method: 'POST',
 		headers: {
 			enctype: 'multipart/form-data'
 		},
 		body: teamCrest.newCrest
-	})
-		.then((data) => console.log(data))
-		.catch((err) => console.log(err));
+	});
+	// .then((data) => console.log(data.text()))
+	// .catch((err) => console.log(err));
+	return response.text();
+}
+
+export async function getTeamCrest(crestUrl: string) {
+	try {
+		const crest = await fetch(crestUrl, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		});
+
+		return crest.text();
+	} catch (e) {
+		console.log(e);
+		const crest = await fetch(`${SERVER_URL}/${crestUrl}`, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		});
+		return crest;
+	}
 }

@@ -1,6 +1,12 @@
 <script lang="ts">
 	import type ITeam from './ITeam';
-	import { addTeam, addTeamCreast, deleteTeam, updateTeam } from './services/crud-clubs';
+	import {
+		addTeam,
+		addTeamCreast,
+		deleteTeam,
+		getTeamCrest,
+		updateTeam
+	} from './services/crud-clubs';
 	import {
 		showTeamModal,
 		editableTeam,
@@ -12,20 +18,23 @@
 	export let team: ITeam;
 	export let editAction: () => void;
 	export let deleteAction: () => void;
+	const SERVER_URL = 'http://localhost:8080';
 
 	async function handleSaveTeam($selectedTeam: ITeam) {
 		try {
-			$newTeam ? await addTeam($selectedTeam) : await updateTeam($selectedTeam);
+			$selectedTeam = $newTeam ? await addTeam($selectedTeam) : await updateTeam($selectedTeam);
 		} catch (e) {
 			console.error(e);
 		}
 	}
 
-	async function handleAddTeamCreast(e) {
+	async function handleAddTeamCreast(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
 		const teamCrest = e.target.files;
 		const crestFile = new FormData();
 		crestFile.append('crest', teamCrest[0]);
-		await addTeamCreast(crestFile);
+		const newCrestUrl = await addTeamCreast({ id: $selectedTeam.id, newCrest: crestFile });
+		console.log(newCrestUrl);
+		team.crestUrl = `${SERVER_URL}//${newCrestUrl}`;
 	}
 	let hi: string;
 </script>
@@ -98,7 +107,7 @@
 				>Venue: <input type="text" readonly={!$editableTeam} bind:value={team.venue} /></label
 			>
 			<label class="crub-clubs-detail-slot"
-				>Last Updated: <input type="text" readonly={!$editableTeam} bind:value={team.lastUpdated} />
+				>Last Updated: <input type="text" readonly={!$editableTeam} value={team.lastUpdated} />
 			</label>
 		</div>
 	</div>
