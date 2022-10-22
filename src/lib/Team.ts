@@ -17,7 +17,7 @@ export default class Team {
 	founded: number | null;
 	clubColors: string;
 	venue: string;
-	lastUpdated: string;
+	lastUpdated: string | null;
 	constructor(team: ITeam) {
 		this.id = team.id;
 		this.name = team.name;
