@@ -52,29 +52,27 @@ export async function updateTeam(team: ITeam) {
 	return result.json();
 }
 
-export async function deleteTeam(team: ITeam) {
-	const result = await fetch(`${SERVER_URL}/${team.id}`, {
+export async function deleteTeam(teamId: number): Promise<boolean> {
+	const result = await fetch(`${SERVER_URL}/${teamId}`, {
 		method: 'DELETE',
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(team)
+		}
 	});
 	return result.ok;
 }
 
-export async function addTeamCreast(teamCrest: INewCrest) {
-	const response = await fetch(`${SERVER_URL}/${teamCrest.id}/upload-crest`, {
+export async function addTeamCreast(teamCrest: INewCrest): Promise<boolean> {
+	const result = await fetch(`${SERVER_URL}/${teamCrest.id}/upload-crest`, {
 		method: 'POST',
 		headers: {
 			enctype: 'multipart/form-data'
 		},
 		body: teamCrest.newCrest
 	});
-	// .then((data) => console.log(data.text()))
-	// .catch((err) => console.log(err));
-	return response.text();
+
+	return result.ok;
 }
 
 export async function getTeamCrest(crestUrl: string) {
