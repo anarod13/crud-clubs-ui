@@ -1,40 +1,45 @@
 <script lang="ts">
 	import type ITeam from './ITeam';
+	import TeamData from './TeamData';
+	import { addTeam, addTeamCreast, deleteTeam, updateTeam } from './services/crud-clubs';
 	import {
-		addTeam,
-		addTeamCreast,
-		deleteTeam,
-		getTeamCrest,
-		updateTeam
-	} from './services/crud-clubs';
-	import {
-		showTeamModal,
+		isTeamModalOpen,
 		editableTeam,
 		selectedTeam,
 		newTeam,
 		showAlertModal
 	} from './store/store';
+	import type Team from './Team';
 
-	export let team: ITeam;
-	export let editAction: () => void;
-	export let deleteAction: () => void;
+	export let editAction: (id: number) => void;
+	export let deleteAction: (id: number) => void;
 	const SERVER_URL = 'http://localhost:8080';
+	let team: Team;
 
-	async function handleSaveTeam($selectedTeam: ITeam) {
+	// interface HTMLInputEvent extends Event {
+	// 	target: HTMLInputElement & EventTarget;
+	// }
+	interface Event<T = EventTarget> {
+		target: T;
+		// ...
+	}
+
+	async function handleSaveTeam($selectedTeam: Team) {
+		const teamData = new TeamData($selectedTeam);
 		try {
-			$selectedTeam = $newTeam ? await addTeam($selectedTeam) : await updateTeam($selectedTeam);
+			$selectedTeam = $newTeam ? await addTeam(teamData) : await updateTeam(teamData);
 		} catch (e) {
 			console.error(e);
 		}
 	}
 
 	async function handleAddTeamCreast(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-		const teamCrest = e.target.files;
+		const teamCrest = (<HTMLInputElement>e.target).files;
 		const crestFile = new FormData();
-		crestFile.append('crest', teamCrest[0]);
-		const newCrestUrl = await addTeamCreast({ id: $selectedTeam.id, newCrest: crestFile });
-		console.log(newCrestUrl);
-		team.crestUrl = `${SERVER_URL}//${newCrestUrl}`;
+		if (teamCrest) {
+			crestFile.append('crest', teamCrest[0]);
+			await addTeamCreast({ id: $selectedTeam.id, newCrest: crestFile });
+		}
 	}
 	let hi: string;
 </script>
@@ -42,16 +47,15 @@
 <button
 	class="crud-clubs-btn close-modal"
 	on:click={() => {
-		$showTeamModal = false;
+		$isTeamModalOpen = false;
 	}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-close.png" alt="Close" /></button
 >
 <main>
-	<h2>{team.name}</h2>
+	<h2>{$selectedTeam.name}</h2>
 	<div class="crud-clubs-team-info-container">
 		<div class="crud-clubs-team-logo-container">
-			<div class="crud-clubs-team-logo">
-				{#if team.crestUrl} <img src={team.crestUrl} alt="" />{/if}
-			</div>
+			{#if $selectedTeam.crestUrl}
+				<img class="crud-clubs-team-logo" src={$selectedTeam.crestUrl} alt="" />{/if}
 			{#if $editableTeam}
 				<input
 					on:change={(e) => {
@@ -61,8 +65,7 @@
 					type="file"
 					name="crest"
 					required
-					bind:value={hi}
-					placeholder={team.crestUrl ? "Update this team's logo" : 'Add a new logo'}
+					placeholder={$selectedTeam.crestUrl ? "Update this team's logo" : 'Add a new logo'}
 				/>
 			{/if}
 		</div>
@@ -72,7 +75,7 @@
 					name="adress"
 					type="text"
 					readonly={!$editableTeam}
-					bind:value={team.address}
+					bind:value={$selectedTeam.address}
 				/></label
 			>
 			<label class="crub-clubs-detail-slot"
@@ -80,7 +83,7 @@
 					name="tla"
 					type="text"
 					readonly={!$editableTeam}
-					bind:value={team.tla}
+					bind:value={$selectedTeam.tla}
 				/></label
 			>
 			<label class="crub-clubs-detail-slot"
@@ -88,26 +91,46 @@
 					name="phone"
 					type="text"
 					readonly={!$editableTeam}
-					bind:value={team.phone}
+					bind:value={$selectedTeam.phone}
 				/></label
 			>
 			<label class="crub-clubs-detail-slot"
-				>Website: <input type="text" readonly={!$editableTeam} bind:value={team.website} /></label
+				>Website: <input
+					type="text"
+					readonly={!$editableTeam}
+					bind:value={$selectedTeam.website}
+				/></label
 			>
 			<label class="crub-clubs-detail-slot"
-				>Email: <input type="text" readonly={!$editableTeam} bind:value={team.email} /></label
+				>Email: <input
+					type="text"
+					readonly={!$editableTeam}
+					bind:value={$selectedTeam.email}
+				/></label
 			>
 			<label class="crub-clubs-detail-slot"
-				>Founded: <input readonly={!$editableTeam} bind:value={team.founded} /></label
+				>Founded: <input readonly={!$editableTeam} bind:value={$selectedTeam.founded} /></label
 			>
 			<label class="crub-clubs-detail-slot"
-				>Club Colors: <input type="text" readonly={!$editableTeam} bind:value={team.clubColors} />
+				>Club Colors: <input
+					type="text"
+					readonly={!$editableTeam}
+					bind:value={$selectedTeam.clubColors}
+				/>
 			</label>
 			<label class="crub-clubs-detail-slot"
-				>Venue: <input type="text" readonly={!$editableTeam} bind:value={team.venue} /></label
+				>Venue: <input
+					type="text"
+					readonly={!$editableTeam}
+					bind:value={$selectedTeam.venue}
+				/></label
 			>
 			<label class="crub-clubs-detail-slot"
-				>Last Updated: <input type="text" readonly={!$editableTeam} value={team.lastUpdated} />
+				>Last Updated: <input
+					type="text"
+					readonly={!$editableTeam}
+					value={$selectedTeam.lastUpdated}
+				/>
 			</label>
 		</div>
 	</div>
@@ -115,7 +138,7 @@
 		<button
 			class="crud-clubs-btn"
 			on:click={() => {
-				editAction();
+				editAction($selectedTeam.id);
 			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-edit.png" alt="Edit" /></button
 		><button
 			class="crud-clubs-btn"
@@ -125,7 +148,7 @@
 		><button
 			class="crud-clubs-btn"
 			on:click={() => {
-				deleteAction();
+				deleteAction($selectedTeam.id);
 			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-trash.png" alt="Delete" /></button
 		>
 	</div>
@@ -183,6 +206,7 @@
 	}
 	.crud-clubs-team-logo {
 		height: 85%;
+		width: 85%;
 		display: flex;
 		justify-content: center;
 		align-items: center;

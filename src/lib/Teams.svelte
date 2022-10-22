@@ -2,22 +2,20 @@
 	import type ITeam from './ITeam';
 	import {
 		selectedTeam,
-		showTeamModal,
+		isTeamModalOpen,
 		showAlertModal,
 		editableTeam,
 		newTeam
 	} from './store/store';
 	import AlertModal from './AlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
-	import { getTeams, deleteTeam } from './services/crud-clubs';
+	import { getTeams, deleteTeam, getTeam } from './services/crud-clubs';
 	import type { IListedTeam } from './IListedTeam';
+	import type Team from './Team';
 	const listedTeams: Promise<IListedTeam[]> = getTeams();
-	const newTeams: ITeam = {
+	const newTeams: Team = {
 		id: 0,
-		area: {
-			id: 0,
-			name: ''
-		},
+		country: '',
 		name: '',
 		shortName: '',
 		tla: '',
@@ -29,35 +27,38 @@
 		founded: null,
 		clubColors: '',
 		venue: '',
-		lastUpdated: ''
+		lastUpdated: null
 	};
 
+	async function showTeamModal(id: number | null) {
+		if (id) {
+			$selectedTeam = await getTeam(id);
+		}
+		$isTeamModalOpen = true;
+	}
 	function handleAddTeam() {
 		$selectedTeam = newTeams;
 		$editableTeam = true;
-		$showTeamModal = true;
+		$isTeamModalOpen = true;
 		$newTeam = true;
 	}
 	function handleSeeTeam(team: number) {
-		$selectedTeam = team;
 		$editableTeam = false;
-		$showTeamModal = true;
+		showTeamModal(team);
 	}
 	function handleEditTeam(team: number) {
-		$selectedTeam = team;
 		$editableTeam = true;
-		$showTeamModal = true;
+		showTeamModal(team);
 		$newTeam = false;
 	}
 
 	function toggleAlertModal() {
 		$showAlertModal = !$showAlertModal;
-		console.log($showAlertModal);
 	}
 
-	function handleDelete(team: number) {
+	async function handleDelete(team: number) {
 		toggleAlertModal();
-		$selectedTeam = team;
+		deleteTeam(team);
 	}
 </script>
 
@@ -103,14 +104,13 @@
 			{/each}
 		</table>
 	{/await}
-	{#if $showTeamModal}
+	{#if $isTeamModalOpen}
 		<TeamModal
-			team={$selectedTeam}
-			deleteAction={() => {
-				$newTeam ? handleAddTeam() : handleDelete($selectedTeam);
+			deleteAction={(teamId) => {
+				$newTeam ? handleAddTeam() : handleDelete(teamId);
 			}}
-			editAction={() => {
-				handleEditTeam($selectedTeam);
+			editAction={(teamId) => {
+				handleEditTeam(teamId);
 			}}
 		/>
 	{/if}
@@ -120,13 +120,7 @@
 </main>
 
 <style>
-	.crud-clubs-team-logo {
-		height: 35px;
-		box-sizing: border-box;
-		display: flex;
-		align-items: center;
-		object-fit: scale-down;
-	}
+
 	main {
 		color: #f7ebe8;
 		font-family: 'Montserrat' !important;
