@@ -9,7 +9,7 @@
 	} from './store/store';
 	import AlertModal from './AlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
-	import { getTeams, deleteTeam, getTeam } from './services/crud-clubs';
+	import { getTeams, deleteTeam, getTeam } from './services/crudClubs';
 	import type { IListedTeam } from './IListedTeam';
 	import type Team from './Team';
 	const listedTeams: Promise<IListedTeam[]> = getTeams();
@@ -120,7 +120,6 @@
 </main>
 
 <style>
-
 	main {
 		color: #f7ebe8;
 		font-family: 'Montserrat' !important;

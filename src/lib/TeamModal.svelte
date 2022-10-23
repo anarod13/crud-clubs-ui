@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type ITeam from './ITeam';
 	import TeamData from './TeamData';
-	import { addTeam, addTeamCreast, deleteTeam, updateTeam } from './services/crud-clubs';
+	import { addTeam, addTeamCreast, deleteTeam, updateTeam } from './services/crudClubs';
 	import {
 		isTeamModalOpen,
 		editableTeam,

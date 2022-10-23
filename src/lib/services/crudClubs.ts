@@ -1,5 +1,5 @@
 import type { INewCrest } from '../INewCrest';
-import type ITeam from '../../lib/ITeam';
+import type ITeam from '../ITeam';
 import type Team from '../Team';
 import { mapsTeam } from '../mappers/teamMapper';
 import type { IListedTeam } from '$lib/IListedTeam';
