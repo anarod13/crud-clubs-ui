@@ -2,7 +2,7 @@ import type { INewCrest } from '../INewCrest';
 import type ITeam from '../ITeam';
 import type Team from '../Team';
 import { mapsTeam } from '../mappers/teamMapper';
-import type { IListedTeam } from '$lib/IListedTeam';
+import type IListedTeam from '$lib/IListedTeam';
 
 const SERVER_URL = 'http://localhost:8080';
 
@@ -53,7 +53,7 @@ export async function updateTeam(team: ITeam) {
 }
 
 export async function deleteTeam(teamId: number): Promise<boolean> {
-	const result = await fetch(`${SERVER_URL}/${teamId}`, {
+	const result = await fetch(`${SERVER_URL}/${teamId}/delete`, {
 		method: 'DELETE',
 		headers: {
 			Accept: 'application/json',
