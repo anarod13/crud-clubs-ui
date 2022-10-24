@@ -7,12 +7,12 @@
 		editableTeam,
 		selectedTeam,
 		newTeam,
-		showAlertModal
+		isAlertModalOpen,
+		teamToDelete
 	} from './store/store';
 	import type Team from './Team';
 
 	export let editAction: (id: number) => void;
-	export let deleteAction: (id: number) => void;
 	const SERVER_URL = 'http://localhost:8080';
 	let team: Team;
 
@@ -41,10 +41,14 @@
 			await addTeamCreast({ id: $selectedTeam.id, newCrest: crestFile });
 		}
 	}
-	let hi: string;
+	async function handleDelete(teamId: number, teamName: string) {
+		$teamToDelete = { id: teamId, name: teamName };
+		$isAlertModalOpen = true;
+	}
 </script>
 
 <button
+	type="button"
 	class="crud-clubs-btn close-modal"
 	on:click={() => {
 		$isTeamModalOpen = false;
@@ -141,14 +145,16 @@
 				editAction($selectedTeam.id);
 			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-edit.png" alt="Edit" /></button
 		><button
+			type="button"
 			class="crud-clubs-btn"
 			on:click={() => {
 				handleSaveTeam($selectedTeam);
 			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-save.png" alt="Save" /></button
 		><button
+			type="button"
 			class="crud-clubs-btn"
 			on:click={() => {
-				deleteAction($selectedTeam.id);
+				handleDelete($selectedTeam.id, $selectedTeam.name);
 			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-trash.png" alt="Delete" /></button
 		>
 	</div>

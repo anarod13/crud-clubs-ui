@@ -1,13 +1,14 @@
-import type Team from '$lib/Team';
-import type { IListedTeam } from '../IListedTeam';
+import type Team from '../../lib/Team';
+import type IListedTeam from '../IListedTeam';
 import {
 	getTeam as getTeamFromAPI,
 	getTeams as getTeamsFromAPI,
-	deleteTeam as deleteTeamInAPI
+	deleteTeam
 } from '../services/crudClubs';
 import {
 	getTeam as getTeamFromCache,
 	getTeams as getTeamsFromCache,
+	removeTeam,
 	storeTeam,
 	storeTeamsList
 } from '../storage/localStorage';
@@ -33,10 +34,20 @@ export async function getTeam(team: number): Promise<Team> {
 	return teamData;
 }
 
-export async function deleteTeam(team: number) {
-	const response = await deleteTeamInAPI(team);
-	if (response) {
+export async function handleDeleteTeam(team: number) {
+	try {
+		await Promise.all([deleteTeam(team), updateTeamsList()]);
+		removeTeam(team);
+	} catch (e) {
+		console.error(e);
+	}
+}
+
+export async function updateTeamsList() {
+	try {
 		const updatedTeamsList = await getTeamsFromAPI();
 		storeTeamsList(updatedTeamsList);
+	} catch (err) {
+		console.log(JSON.stringify(err, Object.getOwnPropertyNames(Error.prototype)));
 	}
 }

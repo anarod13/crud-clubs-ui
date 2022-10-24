@@ -1,4 +1,4 @@
-import type { IListedTeam } from '$lib/IListedTeam';
+import type IListedTeam from '$lib/IListedTeam';
 import type Team from '$lib/Team';
 
 const STORE_TEAMS_LIST_KEY = 'STORE_TEAMS_LIST';
@@ -29,4 +29,9 @@ export function storeTeam(team: number, teamData: Team) {
 
 export function storeTeamsList(listedTeams: IListedTeam[]) {
 	return localStorage.setItem(STORE_TEAMS_LIST_KEY, JSON.stringify(listedTeams));
+}
+
+export function removeTeam(team: number) {
+	const teamKey = `team-${team}`;
+	return localStorage.removeItem(teamKey);
 }

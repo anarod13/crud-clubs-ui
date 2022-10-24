@@ -1,14 +1,30 @@
 <script lang="ts">
-	import { selectedTeam } from './store/store';
-	export let toggleModal: () => void;
+	import { handleDeleteTeam, updateTeamsList, getTeams } from './changes/changes';
+	import { isAlertModalOpen, teamToDelete, listedTeams } from './store/store';
+	export let handleToggleAlertModal: () => void;
+
+	async function handleDeleteTeamBtn(teamId: number) {
+		await handleDeleteTeam(teamId);
+		handleToggleAlertModal();
+	}
 </script>
 
 <div class="crud-clubs-modal-container">
-	<p>Are you sure you want to delete <strong>{$selectedTeam.name}</strong> from the list?</p>
+	<p>Are you sure you want to delete <strong>{$teamToDelete.name}</strong> from the list?</p>
 	<div>
-		<button class="crud-clubs-btn" on:click={() => {}}>YES</button><button
+		<button
+			type="button"
 			class="crud-clubs-btn"
-			on:click={toggleModal}>CANCEL</button
+			on:click={(e) => {
+				e.preventDefault();
+				handleDeleteTeamBtn($teamToDelete.id);
+			}}>YES</button
+		><button
+			type="button"
+			class="crud-clubs-btn"
+			on:click={() => {
+				handleToggleAlertModal();
+			}}>CANCEL</button
 		>
 	</div>
 </div>

@@ -5,7 +5,8 @@
 		isTeamModalOpen,
 		showAlertModal,
 		editableTeam,
-		newTeam
+		isAlertModalOpen,
+		teamToDelete,
 	} from './store/store';
 	import AlertModal from './AlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
@@ -29,7 +30,10 @@
 		venue: '',
 		lastUpdated: null
 	};
-
+	function handleToggleAlertModal() {
+		$isAlertModalOpen = !$isAlertModalOpen;
+		$listedTeams = getTeams();
+	}
 	async function showTeamModal(id: number | null) {
 		if (id) {
 			$selectedTeam = await getTeam(id);
@@ -52,13 +56,9 @@
 		$newTeam = false;
 	}
 
-	function toggleAlertModal() {
-		$showAlertModal = !$showAlertModal;
-	}
-
-	async function handleDelete(team: number) {
-		toggleAlertModal();
-		deleteTeam(team);
+	async function handleDelete(teamId: number, teamName: string) {
+		$teamToDelete = { id: teamId, name: teamName };
+		$isAlertModalOpen = true;
 	}
 </script>
 
@@ -95,8 +95,9 @@
 								handleEditTeam(team.id);
 							}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
 						><button
+							type="button"
 							on:click={() => {
-								handleDelete(team.id);
+								handleDelete(team.id, team.name);
 							}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
 						>
 					</td></tr
@@ -106,16 +107,13 @@
 	{/await}
 	{#if $isTeamModalOpen}
 		<TeamModal
-			deleteAction={(teamId) => {
-				$newTeam ? handleAddTeam() : handleDelete(teamId);
-			}}
 			editAction={(teamId) => {
 				handleEditTeam(teamId);
 			}}
 		/>
 	{/if}
-	{#if $showAlertModal}
-		<AlertModal toggleModal={() => toggleAlertModal()} />
+	{#if $isAlertModalOpen}
+		<AlertModal handleToggleAlertModal={() => handleToggleAlertModal()} />
 	{/if}
 </main>
 
