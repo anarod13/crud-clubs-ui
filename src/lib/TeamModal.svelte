@@ -1,7 +1,6 @@
 <script lang="ts">
-	import type ITeam from './ITeam';
 	import TeamData from './TeamData';
-	import { addTeam, addTeamCreast, deleteTeam, updateTeam } from './services/crudClubs';
+	import { addTeam, addTeamCreast, updateTeam } from './services/crudClubs';
 	import {
 		isTeamModalOpen,
 		editableTeam,
@@ -15,14 +14,6 @@
 	export let editAction: (id: number) => void;
 	const SERVER_URL = 'http://localhost:8080';
 	let team: Team;
-
-	// interface HTMLInputEvent extends Event {
-	// 	target: HTMLInputElement & EventTarget;
-	// }
-	interface Event<T = EventTarget> {
-		target: T;
-		// ...
-	}
 
 	async function handleSaveTeam($selectedTeam: Team) {
 		const teamData = new TeamData($selectedTeam);
@@ -140,6 +131,7 @@
 	</div>
 	<div class="crud-clubs-btn-container">
 		<button
+			type="button"
 			class="crud-clubs-btn"
 			on:click={() => {
 				editAction($selectedTeam.id);

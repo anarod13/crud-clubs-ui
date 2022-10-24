@@ -1,19 +1,18 @@
 <script lang="ts">
-	import type ITeam from './ITeam';
 	import {
 		selectedTeam,
 		isTeamModalOpen,
-		showAlertModal,
 		editableTeam,
+		newTeam,
 		isAlertModalOpen,
 		teamToDelete,
+		listedTeams
 	} from './store/store';
 	import AlertModal from './AlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
 	import { getTeams, getTeam } from './changes/changes';
-	import type { IListedTeam } from './IListedTeam';
 	import type Team from './Team';
-	const listedTeams: Promise<IListedTeam[]> = getTeams();
+	$listedTeams = getTeams();
 	const newTeams: Team = {
 		id: 0,
 		country: '',
@@ -64,10 +63,11 @@
 
 <main>
 	<h1 class="crud-clubs-title">Premiere League</h1>
-	{#await listedTeams then teams}
+	{#await $listedTeams then teams}
 		<div class="crud-clubs-team-info">
 			<p>Currently you have {teams.length} teams listed</p>
 			<button
+				type="button"
 				class="crud-clubs-add-team-btn"
 				on:click={() => {
 					handleAddTeam();
@@ -87,10 +87,12 @@
 					<td class="crud-clubs-team-name">{team.country}</td>
 					<td class="crud-clubs-actions-container"
 						><button
+							type="button"
 							on:click={() => {
 								handleSeeTeam(team.id);
 							}}><img src="./src/assets/bx-football.png" alt="See" /></button
 						><button
+							type="button"
 							on:click={() => {
 								handleEditTeam(team.id);
 							}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
