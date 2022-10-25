@@ -31,7 +31,7 @@ export function storeTeamsList(listedTeams: IListedTeam[]) {
 	return localStorage.setItem(STORE_TEAMS_LIST_KEY, JSON.stringify(listedTeams));
 }
 
-export function removeTeam(team: number) {
+export function removeTeamFromStorage(team: number) {
 	const teamKey = `team-${team}`;
 	return localStorage.removeItem(teamKey);
 }

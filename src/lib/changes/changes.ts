@@ -1,14 +1,19 @@
-import type Team from '../../lib/Team';
+import type { INewCrest } from '$lib/INewCrest';
+import type ITeam from '$lib/ITeam';
+import TeamData from '$lib/TeamData';
+import Team from '../../lib/Team';
 import type IListedTeam from '../IListedTeam';
 import {
 	getTeam as getTeamFromAPI,
 	getTeams as getTeamsFromAPI,
-	deleteTeam
+	deleteTeam,
+	updateTeam,
+	addTeamCreast
 } from '../services/crudClubs';
 import {
 	getTeam as getTeamFromCache,
 	getTeams as getTeamsFromCache,
-	removeTeam,
+	removeTeamFromStorage,
 	storeTeam,
 	storeTeamsList
 } from '../storage/localStorage';
@@ -37,10 +42,26 @@ export async function getTeam(team: number): Promise<Team> {
 export async function handleDeleteTeam(team: number) {
 	try {
 		await Promise.all([deleteTeam(team), updateTeamsList()]);
-		removeTeam(team);
+		removeTeamFromStorage(team);
 	} catch (e) {
 		console.error(e);
 	}
+}
+
+export async function handleUpdateTeam(team: Team) {
+	const teamData = new TeamData(team);
+	try {
+		const updatedTeam = await updateTeam(teamData);
+		updateTeamData(team.id, updatedTeam);
+	} catch (e) {
+		console.error(e);
+	}
+}
+
+
+export async function updateTeamData(team: number, updatedTeam: ITeam) {
+	const teamData = new Team(updatedTeam);
+	storeTeam(team, teamData);
 }
 
 export async function updateTeamsList() {

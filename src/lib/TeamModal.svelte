@@ -10,15 +10,18 @@
 		teamToDelete
 	} from './store/store';
 	import type Team from './Team';
+	import { getTeam, handleUpdateTeam, handleUpdateTeamCrest } from './changes/changes';
 
 	export let editAction: (id: number) => void;
 	const SERVER_URL = 'http://localhost:8080';
 	let team: Team;
 
 	async function handleSaveTeam($selectedTeam: Team) {
-		const teamData = new TeamData($selectedTeam);
 		try {
-			$selectedTeam = $newTeam ? await addTeam(teamData) : await updateTeam(teamData);
+			// $newTeam ? await addTeam($selectedTeam) :
+			await handleUpdateTeam($selectedTeam);
+			$selectedTeam = await getTeam($selectedTeam.id);
+			$editableTeam = false;
 		} catch (e) {
 			console.error(e);
 		}
@@ -121,11 +124,7 @@
 				/></label
 			>
 			<label class="crub-clubs-detail-slot"
-				>Last Updated: <input
-					type="text"
-					readonly={!$editableTeam}
-					value={$selectedTeam.lastUpdated}
-				/>
+				>Last Updated: <input type="text" readonly value={$selectedTeam.lastUpdated} />
 			</label>
 		</div>
 	</div>
