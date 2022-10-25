@@ -1,6 +1,8 @@
 import type ITeam from '$lib/ITeam';
 import type { ITeamArea } from '$lib/ITeamArea';
 import type Team from '$lib/Team';
+
+const SERVER_URL = 'http://localhost:8080';
 export default class TeamData implements ITeam {
 	id: number;
 	area: ITeamArea;
@@ -22,7 +24,7 @@ export default class TeamData implements ITeam {
 		this.name = team.name;
 		this.shortName = team.shortName;
 		this.tla = team.tla;
-		this.crestUrl = team.crestUrl;
+		this.crestUrl = this.getTeamCrestUrl(team.crestUrl);
 		this.address = team.address;
 		this.phone = team.phone;
 		this.website = team.website;
@@ -31,5 +33,9 @@ export default class TeamData implements ITeam {
 		this.clubColors = team.clubColors;
 		this.venue = team.venue;
 		this.lastUpdated = new Date().toISOString();
+	}
+
+	getTeamCrestUrl(crestUrl: string) {
+		return crestUrl.replace(`${SERVER_URL}/`, '');
 	}
 }
