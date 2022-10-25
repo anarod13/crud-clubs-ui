@@ -41,7 +41,7 @@ export async function addTeam(team: ITeam) {
 }
 
 export async function updateTeam(team: ITeam) {
-	const result = await fetch(`${SERVER_URL}/${team.id}/edit`, {
+	const result = await fetch(`${SERVER_URL}/${team.id}/update`, {
 		method: 'PATCH',
 		headers: {
 			Accept: 'application/json',
