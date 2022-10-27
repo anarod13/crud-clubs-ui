@@ -1,7 +1,7 @@
 import type { INewCrest } from '$lib/INewCrest';
 import type ITeam from '$lib/ITeam';
 import TeamData from '$lib/TeamData';
-import Team from '../../lib/Team';
+import Team from '../Team';
 import type IListedTeam from '../IListedTeam';
 import {
 	getTeam as getTeamFromAPI,
@@ -57,7 +57,6 @@ export async function handleUpdateTeam(team: Team) {
 		console.error(e);
 	}
 }
-
 
 export async function updateTeamData(team: number, updatedTeam: ITeam) {
 	const teamData = new Team(updatedTeam);

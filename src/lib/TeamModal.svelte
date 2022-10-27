@@ -10,7 +10,7 @@
 		teamToDelete
 	} from './store/store';
 	import type Team from './Team';
-	import { getTeam, handleUpdateTeam, handleUpdateTeamCrest } from './changes/changes';
+	import { getTeam, handleUpdateTeam } from './application/crudClubs';
 
 	export let editAction: (id: number) => void;
 	const SERVER_URL = 'http://localhost:8080';

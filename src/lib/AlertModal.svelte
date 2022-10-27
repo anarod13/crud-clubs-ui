@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { handleDeleteTeam, updateTeamsList, getTeams } from './changes/changes';
+	import { handleDeleteTeam, updateTeamsList, getTeams } from './application/crudClubs';
 	import { isAlertModalOpen, teamToDelete, listedTeams } from './store/store';
 	export let handleToggleAlertModal: () => void;
 
