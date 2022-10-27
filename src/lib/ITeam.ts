@@ -1,8 +1,12 @@
+import type IActiveCompetition from './entities/IActiveCompetition';
+import type ITeamMember from './entities/ITeamMember';
 import type { ITeamArea } from './ITeamArea';
 
 export default interface ITeam {
 	id: number;
 	area: ITeamArea;
+	activeCompetitions: IActiveCompetition[];
+	squad: ITeamMember[];
 	name: string;
 	shortName: string;
 	tla: string;
