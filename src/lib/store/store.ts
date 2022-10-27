@@ -1,6 +1,6 @@
-import type IListedTeam from '$lib/IListedTeam';
-import type ITeamToDelete from '$lib/ITeamToDelete';
-import type Team from '$lib/Team';
+import type IListedTeam from '../entities/IListedTeam';
+import type ITeamToDelete from '../entities/ITeamToDelete';
+import type Team from '../entities/Team';
 
 import { writable, type Writable } from 'svelte/store';
 

@@ -1,5 +1,5 @@
-import type IListedTeam from '$lib/IListedTeam';
-import type Team from '$lib/Team';
+import type IListedTeam from '../entities/IListedTeam';
+import type Team from '../entities/Team';
 
 const STORE_TEAMS_LIST_KEY = 'STORE_TEAMS_LIST';
 

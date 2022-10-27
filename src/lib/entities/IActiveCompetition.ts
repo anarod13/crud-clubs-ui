@@ -1,4 +1,4 @@
-import type { ITeamArea } from '../ITeamArea';
+import type { ITeamArea } from './ITeamArea';
 
 export default interface IActiveCompetition {
 	id: string;

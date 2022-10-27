@@ -1,15 +1,16 @@
-import type IActiveCompetition from './entities/IActiveCompetition';
-import type ITeamMember from './entities/ITeamMember';
 import type ITeam from './ITeam';
+import type { ITeamArea } from './ITeamArea';
+import type Team from './Team';
+import type IActiveCompetition from './IActiveCompetition';
+import type ITeamMember from './ITeamMember';
 
 const SERVER_URL = 'http://localhost:8080';
-
-export default class Team {
+export default class TeamData implements ITeam {
 	id: number;
-	name: string;
-	country: string;
+	area: ITeamArea;
 	activeCompetitions: IActiveCompetition[];
 	squad: ITeamMember[];
+	name: string;
 	shortName: string;
 	tla: string;
 	crestUrl: string;
@@ -20,16 +21,16 @@ export default class Team {
 	founded: number | null;
 	clubColors: string;
 	venue: string;
-	lastUpdated: string | null;
-	constructor(team: ITeam) {
+	lastUpdated: string;
+	constructor(team: Team) {
 		this.id = team.id;
+		this.area = { id: 2072, name: team.country };
 		this.name = team.name;
 		this.activeCompetitions = team.activeCompetitions;
 		this.squad = team.squad;
-		this.country = team.area.name;
 		this.shortName = team.shortName;
 		this.tla = team.tla;
-		this.crestUrl = `${SERVER_URL}/${team.crestUrl}`;
+		this.crestUrl = this.getTeamCrestUrl(team.crestUrl);
 		this.address = team.address;
 		this.phone = team.phone;
 		this.website = team.website;
@@ -37,6 +38,10 @@ export default class Team {
 		this.founded = team.founded;
 		this.clubColors = team.clubColors;
 		this.venue = team.venue;
-		this.lastUpdated = new Date(team.lastUpdated).toLocaleString();
+		this.lastUpdated = new Date().toISOString();
+	}
+
+	getTeamCrestUrl(crestUrl: string) {
+		return crestUrl.replace(`${SERVER_URL}/`, '');
 	}
 }

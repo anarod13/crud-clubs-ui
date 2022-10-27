@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TeamData from './TeamData';
+	import TeamData from '../lib/entities/TeamData';
 	import { addTeam, addTeamCreast, updateTeam } from './services/crudClubs';
 	import {
 		isTeamModalOpen,
@@ -9,7 +9,7 @@
 		isAlertModalOpen,
 		teamToDelete
 	} from './store/store';
-	import type Team from './Team';
+	import type Team from '../lib/entities/Team';
 	import { getTeam, handleUpdateTeam } from './application/crudClubs';
 
 	export let editAction: (id: number) => void;
@@ -50,7 +50,7 @@
 >
 <main>
 	<h2>{$selectedTeam.name}</h2>
-	<div class="crud-clubs-team-info-container">
+	<div class="crud-clubs-team-main-info-container">
 		<div class="crud-clubs-team-logo-container">
 			{#if $selectedTeam.crestUrl}
 				<img class="crud-clubs-team-logo" src={$selectedTeam.crestUrl} alt="" />{/if}
@@ -128,6 +128,40 @@
 			</label>
 		</div>
 	</div>
+	<div class="crud-clubs-team-active-competitions container">
+		<div>Active competitions:</div>
+		<div class="cru-clubs-active-competition-details">
+			<th class="crud-clubs-active-competition-name">Name</th>
+			<th class="crud-clubs-active-competition-country">Country</th>
+			<th class="crud-clubs-active-competition-code">Code</th>
+			<th class="crud-clubs-active-competition-plan">Plan</th>
+			{#each $selectedTeam.activeCompetitions as activeCompetition}
+				<tr>{activeCompetition.name}</tr>
+				<tr>{activeCompetition.area.name}</tr>
+				<tr>{activeCompetition.code}</tr>
+				<tr>{activeCompetition.plan}</tr>{:else}<p>No active competitions registered</p>{/each}
+		</div>
+	</div>
+	<div class="crud-clubs-team-squad">
+		<div class="crud-clubs-team-squad-title">Squad:</div>
+		<div class="crud-clubs-team-squad">
+			<th class="crud-clubs-team-member-name">Name</th>
+			<th class="crud-clubs-team-member-position">Position</th>
+			<th class="crud-clubs-team-member-birth-country">Birth Country</th>
+			<th class="crud-clubs-team-member-nationality">Nationality</th>
+			<th class="crud-clubs-team-member-shirt-name">Shirt name</th>
+			<th class="crud-clubs-team-member-role">Role</th>
+			{#each $selectedTeam.squad as teamMember}
+				<tr>{teamMember.name}</tr>
+				<tr>{teamMember.position}</tr>
+				<tr>{teamMember.dateOfBirth}</tr>
+				<tr>{teamMember.countryOfBirth}</tr>
+				<tr>{teamMember.nationality}</tr>
+				<tr>{teamMember.shirtNumber}</tr>
+				<tr>{teamMember.role}</tr>
+			{/each}
+		</div>
+	</div>
 	<div class="crud-clubs-btn-container">
 		<button
 			type="button"
@@ -177,7 +211,7 @@
 		right: 24%;
 		z-index: 4;
 	}
-	.crud-clubs-team-info-container {
+	.crud-clubs-team-main-info-container {
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: space-between;

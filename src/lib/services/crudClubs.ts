@@ -1,8 +1,8 @@
-import type { INewCrest } from '../INewCrest';
-import type ITeam from '../ITeam';
-import type Team from '../Team';
+import type { INewCrest } from '../entities/INewCrest';
+import type ITeam from '../entities/ITeam';
+import type Team from '../entities/Team';
 import { mapsTeam } from '../mappers/teamMapper';
-import type IListedTeam from '$lib/IListedTeam';
+import type IListedTeam from '../entities/IListedTeam';
 
 const SERVER_URL = 'http://localhost:8080';
 

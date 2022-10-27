@@ -11,7 +11,7 @@
 	import AlertModal from './AlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
 	import { getTeams, getTeam } from './application/crudClubs';
-	import type Team from './Team';
+	import type Team from './entities/Team';
 	$listedTeams = getTeams();
 	const newTeams: Team = {
 		id: 0,
