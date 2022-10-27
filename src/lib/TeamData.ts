@@ -1,11 +1,15 @@
 import type ITeam from '$lib/ITeam';
 import type { ITeamArea } from '$lib/ITeamArea';
 import type Team from '$lib/Team';
+import type IActiveCompetition from './entities/IActiveCompetition';
+import type ITeamMember from './entities/ITeamMember';
 
 const SERVER_URL = 'http://localhost:8080';
 export default class TeamData implements ITeam {
 	id: number;
 	area: ITeamArea;
+	activeCompetitions: IActiveCompetition[];
+	squad: ITeamMember[];
 	name: string;
 	shortName: string;
 	tla: string;
@@ -22,6 +26,8 @@ export default class TeamData implements ITeam {
 		this.id = team.id;
 		this.area = { id: 2072, name: team.country };
 		this.name = team.name;
+		this.activeCompetitions = team.activeCompetitions;
+		this.squad = team.squad;
 		this.shortName = team.shortName;
 		this.tla = team.tla;
 		this.crestUrl = this.getTeamCrestUrl(team.crestUrl);

@@ -1,5 +1,6 @@
+import type IActiveCompetition from './entities/IActiveCompetition';
+import type ITeamMember from './entities/ITeamMember';
 import type ITeam from './ITeam';
-import type { ITeamArea } from './ITeamArea';
 
 const SERVER_URL = 'http://localhost:8080';
 
@@ -7,6 +8,8 @@ export default class Team {
 	id: number;
 	name: string;
 	country: string;
+	activeCompetitions: IActiveCompetition[];
+	squad: ITeamMember[];
 	shortName: string;
 	tla: string;
 	crestUrl: string;
@@ -21,6 +24,8 @@ export default class Team {
 	constructor(team: ITeam) {
 		this.id = team.id;
 		this.name = team.name;
+		this.activeCompetitions = team.activeCompetitions;
+		this.squad = team.squad;
 		this.country = team.area.name;
 		this.shortName = team.shortName;
 		this.tla = team.tla;
