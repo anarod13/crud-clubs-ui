@@ -3,13 +3,12 @@ import type Team from '../entities/Team';
 
 const STORE_TEAMS_LIST_KEY = 'STORE_TEAMS_LIST';
 
-export function getTeam(team: number): Team {
-	const teamKey = `team-${team}`;
-	const teamData = localStorage.getItem(teamKey);
+export function getTeam(team: string): Team {
+	const teamData = localStorage.getItem(team);
 	if (teamData) {
 		return JSON.parse(teamData);
 	} else {
-		throw new Error(`No data found for ${teamKey}`);
+		throw new Error(`No data found for ${team}`);
 	}
 }
 
@@ -22,16 +21,14 @@ export function getTeams(): IListedTeam[] {
 	}
 }
 
-export function storeTeam(team: number, teamData: Team) {
-	const teamKey = `team-${team}`;
-	return localStorage.setItem(teamKey, JSON.stringify(teamData));
+export function storeTeam(team: string, teamData: Team) {
+	localStorage.setItem(team, JSON.stringify(teamData));
 }
 
 export function storeTeamsList(listedTeams: IListedTeam[]) {
-	return localStorage.setItem(STORE_TEAMS_LIST_KEY, JSON.stringify(listedTeams));
+	localStorage.setItem(STORE_TEAMS_LIST_KEY, JSON.stringify(listedTeams));
 }
 
-export function removeTeamFromStorage(team: number) {
-	const teamKey = `team-${team}`;
-	return localStorage.removeItem(teamKey);
+export function removeTeamFromStorage(team: string) {
+	localStorage.removeItem(team);
 }
