@@ -1,6 +1,6 @@
 import type { INewCrest } from '../entities/INewCrest';
 import type ITeam from '../entities/ITeam';
-import type Team from '../entities/Team';
+import Team from '../entities/Team';
 import { mapsTeam } from '../mappers/teamMapper';
 import type IListedTeam from '../entities/IListedTeam';
 
@@ -18,7 +18,7 @@ export async function getTeams(): Promise<IListedTeam[]> {
 }
 
 export async function getTeam(teamId: number): Promise<Team> {
-	const result = await fetch(`${SERVER_URL}/${teamId}`, {
+	const result = await fetch(`${SERVER_URL}/team/${team}`, {
 		method: 'GET',
 		headers: {
 			Accept: 'application/json',
@@ -28,6 +28,19 @@ export async function getTeam(teamId: number): Promise<Team> {
 	const teamData = await result.json();
 	return mapsTeam(teamData);
 }
+
+export async function updateTeam(team: ITeam) {
+	const result = await fetch(`${SERVER_URL}/team/${team.tla}/update`, {
+		method: 'PATCH',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(team)
+	});
+	return result.json();
+}
+
 export async function addTeam(team: ITeam) {
 	const result = await fetch(`${SERVER_URL}/add`, {
 		method: 'POST',
@@ -40,20 +53,8 @@ export async function addTeam(team: ITeam) {
 	return result.json();
 }
 
-export async function updateTeam(team: ITeam) {
-	const result = await fetch(`${SERVER_URL}/${team.id}/update`, {
-		method: 'PATCH',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(team)
-	});
-	return result.json();
-}
-
-export async function deleteTeam(teamId: number): Promise<boolean> {
-	const result = await fetch(`${SERVER_URL}/${teamId}/delete`, {
+export async function deleteTeam(team: number): Promise<boolean> {
+	const result = await fetch(`${SERVER_URL}/team/${team}/delete`, {
 		method: 'DELETE',
 		headers: {
 			Accept: 'application/json',
@@ -64,7 +65,7 @@ export async function deleteTeam(teamId: number): Promise<boolean> {
 }
 
 export async function addTeamCreast(teamCrest: INewCrest): Promise<boolean> {
-	const result = await fetch(`${SERVER_URL}/${teamCrest.id}/upload-crest`, {
+	const result = await fetch(`${SERVER_URL}/team/${teamCrest.id}/upload-crest`, {
 		method: 'POST',
 		headers: {
 			enctype: 'multipart/form-data'
@@ -73,28 +74,4 @@ export async function addTeamCreast(teamCrest: INewCrest): Promise<boolean> {
 	});
 
 	return result.ok;
-}
-
-export async function getTeamCrest(crestUrl: string) {
-	try {
-		const crest = await fetch(crestUrl, {
-			method: 'GET',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			}
-		});
-
-		return crest.text();
-	} catch (e) {
-		console.log(e);
-		const crest = await fetch(`${SERVER_URL}/${crestUrl}`, {
-			method: 'GET',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			}
-		});
-		return crest;
-	}
 }
