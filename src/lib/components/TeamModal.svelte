@@ -1,6 +1,6 @@
 <script lang="ts">
-	import TeamData from '../lib/entities/TeamData';
-	import { addTeam, addTeamCreast, updateTeam } from './services/crudClubs';
+	import TeamData from '../entities/TeamData';
+	import { addTeam, addTeamCreast, updateTeam } from '../services/crudClubs';
 	import {
 		isTeamModalOpen,
 		editableTeam,
@@ -8,9 +8,9 @@
 		newTeam,
 		isAlertModalOpen,
 		teamToDelete
-	} from './store/store';
-	import type Team from '../lib/entities/Team';
-	import { getTeam, handleUpdateTeam } from './application/crudClubs';
+	} from '../store/store';
+	import type Team from '../entities/Team';
+	import { getTeam, handleUpdateTeam } from '../application/crudClubs';
 
 	export let editAction: (id: number) => void;
 	const SERVER_URL = 'http://localhost:8080';

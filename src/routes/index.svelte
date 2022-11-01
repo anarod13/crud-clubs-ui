@@ -1,5 +1,5 @@
 <script>
-	import Teams from '$lib/Teams.svelte';
+	import Teams from '../lib/components/Teams.svelte';
 </script>
 
 <main>

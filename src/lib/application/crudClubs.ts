@@ -1,7 +1,7 @@
-import type { INewCrest } from '$lib/INewCrest';
-import type ITeam from '$lib/ITeam';
-import TeamData from '$lib/TeamData';
-import Team from '../Team';
+import type { INewCrest } from '../entities/INewCrest';
+import type ITeam from '../entities/ITeam';
+import TeamData from '../entities/TeamData';
+import Team from '../entities/Team';
 import type IListedTeam from '../entities/IListedTeam';
 import {
 	getTeam as getTeamFromAPI,
