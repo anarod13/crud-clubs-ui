@@ -84,12 +84,7 @@
 					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>TLA: <input
-						name="tla"
-						type="text"
-						readonly={!$editableTeam}
-						bind:value={team.tla}
-					/></label
+					>TLA: <input name="tla" type="text" readonly bind:value={team.tla} /></label
 				>
 				<label class="crub-clubs-detail-slot"
 					>Phone: <input
@@ -119,37 +114,46 @@
 				</label>
 			</div>
 		</div>
-		<div class="crud-clubs-team-active-competitions container">
-			<div>Active competitions:</div>
-			<div class="cru-clubs-active-competition-details">
-				<th class="crud-clubs-active-competition-name">Name</th>
-				<th class="crud-clubs-active-competition-country">Country</th>
-				<th class="crud-clubs-active-competition-code">Code</th>
-				<th class="crud-clubs-active-competition-plan">Plan</th>
-				{#each team.activeCompetitions as activeCompetition}
-					<tr>{activeCompetition.name}</tr>
-					<tr>{activeCompetition.area.name}</tr>
-					<tr>{activeCompetition.code}</tr>
-					<tr>{activeCompetition.plan}</tr>{:else}<p>No active competitions registered</p>{/each}
+		<div class="crud-clubs-team-active-competitions-container">
+			<div class="crud-clubs-active-competition-title">Active competitions:</div>
+			<div class="crud-clubs-active-competition-details">
+				<tr>
+					<th class="crud-clubs-active-competition-name">Name</th>
+					<th class="crud-clubs-active-competition-country">Country</th>
+					<th class="crud-clubs-active-competition-code">Code</th>
+					<th class="crud-clubs-active-competition-plan">Plan</th>
+				</tr>{#each team.activeCompetitions as activeCompetition}
+					<tr>
+						<td><input readonly={!$editableTeam} bind:value={activeCompetition.name} /></td>
+						<td><input readonly={!$editableTeam} bind:value={activeCompetition.area.name} /></td>
+						<td><input readonly={!$editableTeam} bind:value={activeCompetition.code} /></td>
+						<td><input readonly={!$editableTeam} bind:value={activeCompetition.plan} /></td>
+					</tr>{:else}<p>No active competitions registered</p>{/each}
 			</div>
 		</div>
-		<div class="crud-clubs-team-squad">
+		<div class="crud-clubs-team-squad-container">
 			<div class="crud-clubs-team-squad-title">Squad:</div>
 			<div class="crud-clubs-team-squad">
-				<th class="crud-clubs-team-member-name">Name</th>
-				<th class="crud-clubs-team-member-position">Position</th>
-				<th class="crud-clubs-team-member-birth-country">Birth Country</th>
-				<th class="crud-clubs-team-member-nationality">Nationality</th>
-				<th class="crud-clubs-team-member-shirt-name">Shirt name</th>
-				<th class="crud-clubs-team-member-role">Role</th>
+				<tr>
+					<th class="crud-clubs-team-member-name">Name</th>
+					<th class="crud-clubs-team-member-position">Position</th>
+					<th class="crud-clubs-team-member-birth-country">Date of Birth</th>
+					<th class="crud-clubs-team-member-birth-country">Birth Country</th>
+					<th class="crud-clubs-team-member-nationality">Nationality</th>
+					<th class="crud-clubs-team-member-shirt-name">Shirt name</th>
+					<th class="crud-clubs-team-member-role">Role</th></tr
+				>
 				{#each team.squad as teamMember}
-					<tr>{teamMember.name}</tr>
-					<tr>{teamMember.position}</tr>
-					<tr>{teamMember.dateOfBirth}</tr>
-					<tr>{teamMember.countryOfBirth}</tr>
-					<tr>{teamMember.nationality}</tr>
-					<tr>{teamMember.shirtNumber}</tr>
-					<tr>{teamMember.role}</tr>
+					<tr>
+						<td><input readonly={!$editableTeam} bind:value={teamMember.name} /></td>
+						<td><input readonly={!$editableTeam} bind:value={teamMember.position} /></td>
+						<td><input readonly={!$editableTeam} bind:value={teamMember.dateOfBirth} /></td>
+						<td><input readonly={!$editableTeam} bind:value={teamMember.countryOfBirth} /></td>
+						<td><input readonly={!$editableTeam} bind:value={teamMember.nationality} /></td>
+						<td><input readonly={!$editableTeam} bind:value={teamMember.shirtNumber} /></td>
+						<td><input readonly={!$editableTeam} bind:value={teamMember.role} /></td></tr
+					>
+				{:else}<p>No team squad registered</p>
 				{/each}
 			</div>
 		</div>
@@ -179,13 +183,13 @@
 
 <style>
 	main {
-		/* position: fixed; */
+		position: absolute;
 		top: 10%;
 		background-color: #444140;
 		font-family: 'Montserrat';
 		border-radius: 15px;
 		padding: 20px;
-		width: 50%;
+		width: 75%;
 		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 		display: flex;
 		flex-direction: column;
@@ -196,17 +200,17 @@
 		text-align: center;
 	}
 	.close-modal {
-		position: fixed;
+		position: absolute;
 		height: 15px;
 		width: 15px;
-		top: 15%;
-		right: 24%;
+		top: 12%;
+		right: 12%;
 		z-index: 4;
 	}
 	.crud-clubs-team-main-info-container {
 		display: flex;
 		flex-wrap: nowrap;
-		justify-content: space-between;
+		justify-content: space-evenly;
 		padding: 0% 7%;
 	}
 	.crud-clubs-team-details {
@@ -214,6 +218,38 @@
 		display: flex;
 		flex-direction: column;
 		color: #f7ebe8;
+	}
+
+	.crud-clubs-active-competition-details {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		margin: 8px;
+	}
+	tr {
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: center;
+		text-align: left;
+		margin-top: 5px;
+	}
+	.crud-clubs-active-competition-details input,
+	.crud-clubs-active-competition-details th {
+		width: 80%;
+		height: 20px;
+	}
+
+	.crud-clubs-team-squad {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		margin: 8px;
+	}
+	.crud-clubs-team-squad input,
+	.crud-clubs-team-squad th {
+		width: 80%;
+		height: 20px;
 	}
 	img {
 		width: 80%;
@@ -223,6 +259,7 @@
 	}
 	.crud-clubs-team-logo-container {
 		display: flex;
+		width: 40%;
 		flex-direction: column;
 		height: 300px;
 		margin: 0 10px;
