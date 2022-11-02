@@ -12,34 +12,34 @@
 	import { getTeams, getTeam } from '../application/crudClubs';
 	import type Team from '../entities/Team';
 	$listedTeams = getTeams();
-	const newTeams: Team = {
-		id: 0,
-		country: '',
-		name: '',
-		shortName: '',
-		tla: '',
-		crestUrl: '',
-		address: '',
-		phone: '',
-		website: '',
-		email: '',
-		founded: null,
-		clubColors: '',
-		venue: '',
-		lastUpdated: null
-	};
+	// const newTeams: Team = {
+	// 	id: 0,
+	// 	country: '',
+	// 	name: '',
+	// 	shortName: '',
+	// 	tla: '',
+	// 	crestUrl: '',
+	// 	address: '',
+	// 	phone: '',
+	// 	website: '',
+	// 	email: '',
+	// 	founded: null,
+	// 	clubColors: '',
+	// 	venue: '',
+	// 	lastUpdated: null
+	// };
+
 	function handleToggleAlertModal() {
 		$isAlertModalOpen = !$isAlertModalOpen;
 		$listedTeams = getTeams();
 	}
 	async function showTeamModal(team: string | null) {
 		if (team) {
-			$selectedTeam = await getTeam(team);
+			$selectedTeam = team;
 		}
 		$isTeamModalOpen = true;
 	}
 	function handleAddTeam() {
-		$selectedTeam = newTeams;
 		$editableTeam = true;
 		$isTeamModalOpen = true;
 		$newTeam = true;
@@ -55,7 +55,7 @@
 	}
 
 	async function handleDelete(team: string) {
-		$teamToDelete = team;
+		$selectedTeam = team;
 		$isAlertModalOpen = true;
 	}
 </script>

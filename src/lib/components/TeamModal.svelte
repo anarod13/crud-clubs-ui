@@ -6,8 +6,7 @@
 		editableTeam,
 		selectedTeam,
 		newTeam,
-		isAlertModalOpen,
-		teamToDelete
+		isAlertModalOpen
 	} from '../store/store';
 	import type Team from '../entities/Team';
 	import { getTeam, handleUpdateTeam } from '../application/crudClubs';
@@ -20,7 +19,7 @@
 		try {
 			// $newTeam ? await addTeam($selectedTeam) :
 			await handleUpdateTeam($selectedTeam);
-			$selectedTeam = await getTeam($selectedTeam.tla);
+			$selectedTeam = await getTeam(team.tla);
 			$editableTeam = false;
 		} catch (e) {
 			console.error(e);
@@ -32,12 +31,16 @@
 		const crestFile = new FormData();
 		if (teamCrest) {
 			crestFile.append('crest', teamCrest[0]);
-			await addTeamCreast({ id: $selectedTeam.id, newCrest: crestFile });
+			await addTeamCreast({ id: team.id, newCrest: crestFile });
 		}
 	}
 	async function handleDelete(team: string) {
-		$teamToDelete = team;
+		$selectedTeam = team;
 		$isAlertModalOpen = true;
+	}
+
+	async function loadTeam() {
+		team = await getTeam($selectedTeam);
 	}
 </script>
 
@@ -48,141 +51,130 @@
 		$isTeamModalOpen = false;
 	}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-close.png" alt="Close" /></button
 >
+
 <main>
-	<h2>{$selectedTeam.name}</h2>
-	<div class="crud-clubs-team-main-info-container">
-		<div class="crud-clubs-team-logo-container">
-			{#if $selectedTeam.crestUrl}
-				<img class="crud-clubs-team-logo" src={$selectedTeam.crestUrl} alt="" />{/if}
-			{#if $editableTeam}
-				<input
-					on:change={(e) => {
-						handleAddTeamCreast(e);
-					}}
-					class="crud-clubs-add-logo-input form-control-file"
-					type="file"
-					name="crest"
-					required
-					placeholder={$selectedTeam.crestUrl ? "Update this team's logo" : 'Add a new logo'}
-				/>
-			{/if}
+	{#await loadTeam()}
+		<div>Loading...</div>
+	{:then}
+		<h2>{team.name}</h2>
+		<div class="crud-clubs-team-main-info-container">
+			<div class="crud-clubs-team-logo-container">
+				{#if team.crestUrl}
+					<img class="crud-clubs-team-logo" src={team.crestUrl} alt="" />{/if}
+				{#if $editableTeam}
+					<input
+						on:change={(e) => {
+							handleAddTeamCreast(e);
+						}}
+						class="crud-clubs-add-logo-input form-control-file"
+						type="file"
+						name="crest"
+						required
+						placeholder={team.crestUrl ? "Update this team's logo" : 'Add a new logo'}
+					/>
+				{/if}
+			</div>
+			<div class="crud-clubs-team-details">
+				<label class="crub-clubs-detail-slot"
+					>Adress: <input
+						name="adress"
+						type="text"
+						readonly={!$editableTeam}
+						bind:value={team.address}
+					/></label
+				>
+				<label class="crub-clubs-detail-slot"
+					>TLA: <input
+						name="tla"
+						type="text"
+						readonly={!$editableTeam}
+						bind:value={team.tla}
+					/></label
+				>
+				<label class="crub-clubs-detail-slot"
+					>Phone: <input
+						name="phone"
+						type="text"
+						readonly={!$editableTeam}
+						bind:value={team.phone}
+					/></label
+				>
+				<label class="crub-clubs-detail-slot"
+					>Website: <input type="text" readonly={!$editableTeam} bind:value={team.website} /></label
+				>
+				<label class="crub-clubs-detail-slot"
+					>Email: <input type="text" readonly={!$editableTeam} bind:value={team.email} /></label
+				>
+				<label class="crub-clubs-detail-slot"
+					>Founded: <input readonly={!$editableTeam} bind:value={team.founded} /></label
+				>
+				<label class="crub-clubs-detail-slot"
+					>Club Colors: <input type="text" readonly={!$editableTeam} bind:value={team.clubColors} />
+				</label>
+				<label class="crub-clubs-detail-slot"
+					>Venue: <input type="text" readonly={!$editableTeam} bind:value={team.venue} /></label
+				>
+				<label class="crub-clubs-detail-slot"
+					>Last Updated: <input type="text" readonly value={team.lastUpdated} />
+				</label>
+			</div>
 		</div>
-		<div class="crud-clubs-team-details">
-			<label class="crub-clubs-detail-slot"
-				>Adress: <input
-					name="adress"
-					type="text"
-					readonly={!$editableTeam}
-					bind:value={$selectedTeam.address}
-				/></label
-			>
-			<label class="crub-clubs-detail-slot"
-				>TLA: <input
-					name="tla"
-					type="text"
-					readonly={!$editableTeam}
-					bind:value={$selectedTeam.tla}
-				/></label
-			>
-			<label class="crub-clubs-detail-slot"
-				>Phone: <input
-					name="phone"
-					type="text"
-					readonly={!$editableTeam}
-					bind:value={$selectedTeam.phone}
-				/></label
-			>
-			<label class="crub-clubs-detail-slot"
-				>Website: <input
-					type="text"
-					readonly={!$editableTeam}
-					bind:value={$selectedTeam.website}
-				/></label
-			>
-			<label class="crub-clubs-detail-slot"
-				>Email: <input
-					type="text"
-					readonly={!$editableTeam}
-					bind:value={$selectedTeam.email}
-				/></label
-			>
-			<label class="crub-clubs-detail-slot"
-				>Founded: <input readonly={!$editableTeam} bind:value={$selectedTeam.founded} /></label
-			>
-			<label class="crub-clubs-detail-slot"
-				>Club Colors: <input
-					type="text"
-					readonly={!$editableTeam}
-					bind:value={$selectedTeam.clubColors}
-				/>
-			</label>
-			<label class="crub-clubs-detail-slot"
-				>Venue: <input
-					type="text"
-					readonly={!$editableTeam}
-					bind:value={$selectedTeam.venue}
-				/></label
-			>
-			<label class="crub-clubs-detail-slot"
-				>Last Updated: <input type="text" readonly value={$selectedTeam.lastUpdated} />
-			</label>
+		<div class="crud-clubs-team-active-competitions container">
+			<div>Active competitions:</div>
+			<div class="cru-clubs-active-competition-details">
+				<th class="crud-clubs-active-competition-name">Name</th>
+				<th class="crud-clubs-active-competition-country">Country</th>
+				<th class="crud-clubs-active-competition-code">Code</th>
+				<th class="crud-clubs-active-competition-plan">Plan</th>
+				{#each team.activeCompetitions as activeCompetition}
+					<tr>{activeCompetition.name}</tr>
+					<tr>{activeCompetition.area.name}</tr>
+					<tr>{activeCompetition.code}</tr>
+					<tr>{activeCompetition.plan}</tr>{:else}<p>No active competitions registered</p>{/each}
+			</div>
 		</div>
-	</div>
-	<div class="crud-clubs-team-active-competitions container">
-		<div>Active competitions:</div>
-		<div class="cru-clubs-active-competition-details">
-			<th class="crud-clubs-active-competition-name">Name</th>
-			<th class="crud-clubs-active-competition-country">Country</th>
-			<th class="crud-clubs-active-competition-code">Code</th>
-			<th class="crud-clubs-active-competition-plan">Plan</th>
-			{#each $selectedTeam.activeCompetitions as activeCompetition}
-				<tr>{activeCompetition.name}</tr>
-				<tr>{activeCompetition.area.name}</tr>
-				<tr>{activeCompetition.code}</tr>
-				<tr>{activeCompetition.plan}</tr>{:else}<p>No active competitions registered</p>{/each}
-		</div>
-	</div>
-	<div class="crud-clubs-team-squad">
-		<div class="crud-clubs-team-squad-title">Squad:</div>
 		<div class="crud-clubs-team-squad">
-			<th class="crud-clubs-team-member-name">Name</th>
-			<th class="crud-clubs-team-member-position">Position</th>
-			<th class="crud-clubs-team-member-birth-country">Birth Country</th>
-			<th class="crud-clubs-team-member-nationality">Nationality</th>
-			<th class="crud-clubs-team-member-shirt-name">Shirt name</th>
-			<th class="crud-clubs-team-member-role">Role</th>
-			{#each $selectedTeam.squad as teamMember}
-				<tr>{teamMember.name}</tr>
-				<tr>{teamMember.position}</tr>
-				<tr>{teamMember.dateOfBirth}</tr>
-				<tr>{teamMember.countryOfBirth}</tr>
-				<tr>{teamMember.nationality}</tr>
-				<tr>{teamMember.shirtNumber}</tr>
-				<tr>{teamMember.role}</tr>
-			{/each}
+			<div class="crud-clubs-team-squad-title">Squad:</div>
+			<div class="crud-clubs-team-squad">
+				<th class="crud-clubs-team-member-name">Name</th>
+				<th class="crud-clubs-team-member-position">Position</th>
+				<th class="crud-clubs-team-member-birth-country">Birth Country</th>
+				<th class="crud-clubs-team-member-nationality">Nationality</th>
+				<th class="crud-clubs-team-member-shirt-name">Shirt name</th>
+				<th class="crud-clubs-team-member-role">Role</th>
+				{#each team.squad as teamMember}
+					<tr>{teamMember.name}</tr>
+					<tr>{teamMember.position}</tr>
+					<tr>{teamMember.dateOfBirth}</tr>
+					<tr>{teamMember.countryOfBirth}</tr>
+					<tr>{teamMember.nationality}</tr>
+					<tr>{teamMember.shirtNumber}</tr>
+					<tr>{teamMember.role}</tr>
+				{/each}
+			</div>
 		</div>
-	</div>
-	<div class="crud-clubs-btn-container">
-		<button
-			type="button"
-			class="crud-clubs-btn"
-			on:click={() => {
-				updateAction($selectedTeam.tla);
-			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-edit.png" alt="Edit" /></button
-		><button
-			type="button"
-			class="crud-clubs-btn"
-			on:click={() => {
-				handleSaveTeam($selectedTeam);
-			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-save.png" alt="Save" /></button
-		><button
-			type="button"
-			class="crud-clubs-btn"
-			on:click={() => {
-				handleDelete($selectedTeam.tla);
-			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-trash.png" alt="Delete" /></button
-		>
-	</div>
+		<div class="crud-clubs-btn-container">
+			<button
+				type="button"
+				class="crud-clubs-btn"
+				on:click={() => {
+					updateAction(team.tla);
+				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-edit.png" alt="Edit" /></button
+			><button
+				type="button"
+				class="crud-clubs-btn"
+				on:click={() => {
+					handleSaveTeam(team);
+				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-save.png" alt="Save" /></button
+			><button
+				type="button"
+				class="crud-clubs-btn"
+				on:click={() => {
+					handleDelete(team.tla);
+				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-trash.png" alt="Delete" /></button
+			>
+		</div>
+	{/await}
 </main>
 
 <style>
