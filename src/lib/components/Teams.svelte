@@ -33,9 +33,9 @@
 		$isAlertModalOpen = !$isAlertModalOpen;
 		$listedTeams = getTeams();
 	}
-	async function showTeamModal(id: number | null) {
-		if (id) {
-			$selectedTeam = await getTeam(id);
+	async function showTeamModal(team: string | null) {
+		if (team) {
+			$selectedTeam = await getTeam(team);
 		}
 		$isTeamModalOpen = true;
 	}
@@ -45,7 +45,7 @@
 		$isTeamModalOpen = true;
 		$newTeam = true;
 	}
-	function handleSeeTeam(team: number) {
+	function handleSeeTeam(team: string) {
 		$editableTeam = false;
 		showTeamModal(team);
 	}
@@ -84,12 +84,12 @@
 			{#each teams as team}
 				<tr class="crud-clubs-team-row">
 					<td class="crud-clubs-team-name">{team.name}</td>
-					<td class="crud-clubs-team-name">{team.country}</td>
+					<td class="crud-clubs-team-name">{team.area.name}</td>
 					<td class="crud-clubs-actions-container"
 						><button
 							type="button"
 							on:click={() => {
-								handleSeeTeam(team.id);
+								handleSeeTeam(team.tla);
 							}}><img src="./src/assets/bx-football.png" alt="See" /></button
 						><button
 							type="button"

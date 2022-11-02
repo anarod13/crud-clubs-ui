@@ -20,7 +20,7 @@
 		try {
 			// $newTeam ? await addTeam($selectedTeam) :
 			await handleUpdateTeam($selectedTeam);
-			$selectedTeam = await getTeam($selectedTeam.id);
+			$selectedTeam = await getTeam($selectedTeam.tla);
 			$editableTeam = false;
 		} catch (e) {
 			console.error(e);

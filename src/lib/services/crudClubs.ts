@@ -17,7 +17,7 @@ export async function getTeams(): Promise<IListedTeam[]> {
 	return result.json();
 }
 
-export async function getTeam(teamId: number): Promise<Team> {
+export async function getTeam(team: string): Promise<ITeam> {
 	const result = await fetch(`${SERVER_URL}/team/${team}`, {
 		method: 'GET',
 		headers: {
@@ -25,8 +25,7 @@ export async function getTeam(teamId: number): Promise<Team> {
 			'Content-Type': 'application/json'
 		}
 	});
-	const teamData = await result.json();
-	return mapsTeam(teamData);
+	return await result.json();
 }
 
 export async function updateTeam(team: ITeam) {

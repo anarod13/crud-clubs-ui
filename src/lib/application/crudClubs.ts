@@ -28,12 +28,12 @@ export async function getTeams(): Promise<IListedTeam[]> {
 	}
 	return teamsList;
 }
-export async function getTeam(team: number): Promise<Team> {
+export async function getTeam(team: string): Promise<Team> {
 	let teamData;
 	try {
 		teamData = getTeamFromCache(team);
 	} catch (e) {
-		teamData = await getTeamFromAPI(team);
+		teamData = new Team(await getTeamFromAPI(team));
 		storeTeam(team, teamData);
 	}
 	return teamData;
