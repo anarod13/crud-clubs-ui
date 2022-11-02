@@ -5,7 +5,6 @@
 		editableTeam,
 		newTeam,
 		isAlertModalOpen,
-		teamToDelete,
 		listedTeams
 	} from '../store/store';
 	import AlertModal from './AlertModal.svelte';

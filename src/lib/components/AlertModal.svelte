@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { handleDeleteTeam, updateTeamsList, getTeams } from '../application/crudClubs';
-	import { isAlertModalOpen, teamToDelete, listedTeams } from '../store/store';
+	import { isAlertModalOpen, listedTeams } from '../store/store';
 	export let handleToggleAlertModal: () => void;
 
 	async function handleDeleteTeamBtn(team: string) {
