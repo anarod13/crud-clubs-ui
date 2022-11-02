@@ -3,8 +3,8 @@
 	import { isAlertModalOpen, teamToDelete, listedTeams } from '../store/store';
 	export let handleToggleAlertModal: () => void;
 
-	async function handleDeleteTeamBtn(teamId: number) {
-		await handleDeleteTeam(teamId);
+	async function handleDeleteTeamBtn(team: string) {
+		await handleDeleteTeam(team);
 		handleToggleAlertModal();
 	}
 </script>

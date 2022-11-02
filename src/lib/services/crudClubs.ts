@@ -52,7 +52,7 @@ export async function addTeam(team: ITeam) {
 	return result.json();
 }
 
-export async function deleteTeam(team: number): Promise<boolean> {
+export async function deleteTeam(team: string): Promise<boolean> {
 	const result = await fetch(`${SERVER_URL}/team/${team}/delete`, {
 		method: 'DELETE',
 		headers: {

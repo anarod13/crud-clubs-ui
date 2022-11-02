@@ -55,8 +55,8 @@
 		$newTeam = false;
 	}
 
-	async function handleDelete(teamId: number, teamName: string) {
-		$teamToDelete = { id: teamId, name: teamName };
+	async function handleDelete(team: string) {
+		$teamToDelete = team;
 		$isAlertModalOpen = true;
 	}
 </script>
@@ -99,7 +99,7 @@
 						><button
 							type="button"
 							on:click={() => {
-								handleDelete(team.id, team.name);
+								handleDelete(team.tla);
 							}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
 						>
 					</td></tr

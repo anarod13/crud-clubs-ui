@@ -35,8 +35,8 @@
 			await addTeamCreast({ id: $selectedTeam.id, newCrest: crestFile });
 		}
 	}
-	async function handleDelete(teamId: number, teamName: string) {
-		$teamToDelete = { id: teamId, name: teamName };
+	async function handleDelete(team: string) {
+		$teamToDelete = team;
 		$isAlertModalOpen = true;
 	}
 </script>
@@ -179,7 +179,7 @@
 			type="button"
 			class="crud-clubs-btn"
 			on:click={() => {
-				handleDelete($selectedTeam.id, $selectedTeam.name);
+				handleDelete($selectedTeam.tla);
 			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-trash.png" alt="Delete" /></button
 		>
 	</div>
