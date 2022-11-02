@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { handleDeleteTeam, updateTeamsList, getTeams } from '../application/crudClubs';
-	import { isAlertModalOpen, listedTeams } from '../store/store';
+	import { selectedTeam } from '../store/store';
 	export let handleToggleAlertModal: () => void;
 
 	async function handleDeleteTeamBtn(team: string) {
@@ -10,14 +10,14 @@
 </script>
 
 <div class="crud-clubs-modal-container">
-	<p>Are you sure you want to delete <strong>{$teamToDelete.name}</strong> from the list?</p>
+	<p>Are you sure you want to delete <strong>{$selectedTeam}</strong> from the list?</p>
 	<div>
 		<button
 			type="button"
 			class="crud-clubs-btn"
 			on:click={(e) => {
 				e.preventDefault();
-				handleDeleteTeamBtn($teamToDelete.id);
+				handleDeleteTeamBtn($selectedTeam);
 			}}>YES</button
 		><button
 			type="button"
