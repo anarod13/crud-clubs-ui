@@ -39,7 +39,7 @@ export async function getTeam(team: string): Promise<Team> {
 	return teamData;
 }
 
-export async function handleDeleteTeam(team: number) {
+export async function handleDeleteTeam(team: string) {
 	try {
 		await Promise.all([deleteTeam(team), updateTeamsList()]);
 		removeTeamFromStorage(team);
@@ -52,15 +52,16 @@ export async function handleUpdateTeam(team: Team) {
 	const teamData = new TeamData(team);
 	try {
 		const updatedTeam = await updateTeam(teamData);
-		updateTeamData(team.id, updatedTeam);
+		updateLocalTeamData(team.tla, updatedTeam);
 	} catch (e) {
 		console.error(e);
 	}
 }
 
-export async function updateTeamData(team: number, updatedTeam: ITeam) {
+async function updateLocalTeamData(team: string, updatedTeam: ITeam) {
 	const teamData = new Team(updatedTeam);
 	storeTeam(team, teamData);
+	await updateTeamsList();
 }
 
 export async function updateTeamsList() {

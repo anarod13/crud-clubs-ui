@@ -49,7 +49,7 @@
 		$editableTeam = false;
 		showTeamModal(team);
 	}
-	function handleEditTeam(team: number) {
+	function handleUpdateTeam(team: string) {
 		$editableTeam = true;
 		showTeamModal(team);
 		$newTeam = false;
@@ -94,7 +94,7 @@
 						><button
 							type="button"
 							on:click={() => {
-								handleEditTeam(team.id);
+								handleUpdateTeam(team.tla);
 							}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
 						><button
 							type="button"
@@ -109,8 +109,8 @@
 	{/await}
 	{#if $isTeamModalOpen}
 		<TeamModal
-			editAction={(teamId) => {
-				handleEditTeam(teamId);
+			updateAction={(team) => {
+				handleUpdateTeam(team);
 			}}
 		/>
 	{/if}

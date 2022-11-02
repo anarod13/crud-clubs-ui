@@ -12,7 +12,7 @@
 	import type Team from '../entities/Team';
 	import { getTeam, handleUpdateTeam } from '../application/crudClubs';
 
-	export let editAction: (id: number) => void;
+	export let updateAction: (team: string) => void;
 	const SERVER_URL = 'http://localhost:8080';
 	let team: Team;
 
@@ -167,7 +167,7 @@
 			type="button"
 			class="crud-clubs-btn"
 			on:click={() => {
-				editAction($selectedTeam.id);
+				updateAction($selectedTeam.tla);
 			}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-edit.png" alt="Edit" /></button
 		><button
 			type="button"
@@ -187,7 +187,7 @@
 
 <style>
 	main {
-		position: fixed;
+		/* position: fixed; */
 		top: 10%;
 		background-color: #444140;
 		font-family: 'Montserrat';
