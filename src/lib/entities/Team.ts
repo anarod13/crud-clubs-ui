@@ -12,7 +12,7 @@ export default class Team {
 	squad: ITeamMember[];
 	shortName: string;
 	tla: string;
-	crestUrl: string;
+	crestUrl: string | null;
 	address: string;
 	phone: string | null;
 	website: string;
@@ -29,7 +29,7 @@ export default class Team {
 		this.country = team.area.name;
 		this.shortName = team.shortName;
 		this.tla = team.tla;
-		this.crestUrl = `${SERVER_URL}/${team.crestUrl}`;
+		this.crestUrl = team.crestUrl && `${SERVER_URL}/${team.crestUrl}`;
 		this.address = team.address;
 		this.phone = team.phone;
 		this.website = team.website;

@@ -13,7 +13,7 @@ export default class TeamData implements ITeam {
 	name: string;
 	shortName: string;
 	tla: string;
-	crestUrl: string;
+	crestUrl: string | null;
 	address: string;
 	phone: string | null;
 	website: string;
@@ -30,7 +30,7 @@ export default class TeamData implements ITeam {
 		this.squad = team.squad;
 		this.shortName = team.shortName;
 		this.tla = team.tla;
-		this.crestUrl = this.getTeamCrestUrl(team.crestUrl);
+		this.crestUrl = team.crestUrl && this.getTeamCrestUrl(team.crestUrl);
 		this.address = team.address;
 		this.phone = team.phone;
 		this.website = team.website;

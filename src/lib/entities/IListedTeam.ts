@@ -6,7 +6,7 @@ export default interface IListedTeam {
 	name: string;
 	shortName: string;
 	tla: string;
-	crestUrl: string;
+	crestUrl: string | null;
 	address: string;
 	phone: string | null;
 	website: string;

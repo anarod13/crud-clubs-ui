@@ -10,7 +10,7 @@ export default interface ITeam {
 	name: string;
 	shortName: string;
 	tla: string;
-	crestUrl: string;
+	crestUrl: string | null;
 	address: string;
 	phone: string | null;
 	website: string;
