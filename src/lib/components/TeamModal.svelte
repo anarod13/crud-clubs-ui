@@ -58,20 +58,20 @@
 	{:then}
 		<h2>{team.name}</h2>
 		<div class="crud-clubs-team-main-info-container">
-			<div class="crud-clubs-team-logo-container">
+			<div class="crud-clubs-team-crest-container">
 				{#if team.crestUrl}
-					<img class="crud-clubs-team-logo" src={team.crestUrl} alt="" />{/if}
+					<img class="crud-clubs-team-crest" src={team.crestUrl} alt="" />{/if}
 				{#if $editableTeam}
-					<input
-						on:change={(e) => {
-							handleAddTeamCreast(e);
-						}}
-						class="crud-clubs-add-logo-input form-control-file"
-						type="file"
-						name="crest"
-						required
-						placeholder={team.crestUrl ? "Update this team's logo" : 'Add a new logo'}
-					/>
+					<label class="crud-clubs-add-crest-field">
+						{team.crestUrl ? "Update this team's crest" : 'Add a new crest'}<input
+							on:change={(e) => {
+								handleAddTeamCreast(e);
+							}}
+							type="file"
+							name="crest"
+							required
+						/>
+					</label>
 				{/if}
 			</div>
 			<div class="crud-clubs-team-details">
@@ -257,42 +257,46 @@
 		justify-content: center;
 		object-fit: scale-down;
 	}
-	.crud-clubs-team-logo-container {
+	.crud-clubs-team-crest-container {
 		display: flex;
 		width: 40%;
 		flex-direction: column;
 		height: 300px;
 		margin: 0 10px;
 	}
-	.crud-clubs-team-logo {
+	.crud-clubs-team-crest {
 		height: 85%;
 		width: 85%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		border: none;
 	}
-	.crud-clubs-team-logo-form {
-		height: 15%;
-		display: flex;
-		flex-wrap: wrap;
-		flex-direction: row;
-		align-items: center;
-	}
-	.crud-clubs-add-logo-input {
+	.crud-clubs-add-crest-field {
 		width: 65%;
 		margin: 10px;
-	}
-	.crud-clubs-add-logo-btn {
-		background-color: #444140;
-		font-family: 'Montserrat';
+		background: none;
+		color: #b4b1b1;
+		text-shadow: rgba(0, 0, 0, 0.687) 0.1em 0.1em 0.3em;
 		border: none;
-		border-radius: 10px;
-		height: 30px;
-		padding: 10px;
-		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+		font-weight: bold;
+		border-radius: 5px;
+		height: 25px;
+		padding: 3px 10px;
+		font-family: 'Montserrat';
 		display: flex;
 		justify-items: center;
 		align-items: center;
+		cursor: pointer;
+	}
+
+	.crud-clubs-add-crest-field:hover {
+		transition: 0.15s;
+		background-color: #9b96947e;
+		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	}
+	input[type='file'] {
+		display: none;
 	}
 	.crub-clubs-detail-slot {
 		display: flex;
