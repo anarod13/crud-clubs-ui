@@ -10,39 +10,21 @@
 	import AlertModal from './AlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
 	import { getTeams, getTeam } from '../application/crudClubs';
-	import type Team from '../entities/Team';
-	$listedTeams = getTeams();
-	// const newTeams: Team = {
-	// 	id: 0,
-	// 	country: '',
-	// 	name: '',
-	// 	shortName: '',
-	// 	tla: '',
-	// 	crestUrl: '',
-	// 	address: '',
-	// 	phone: '',
-	// 	website: '',
-	// 	email: '',
-	// 	founded: null,
-	// 	clubColors: '',
-	// 	venue: '',
-	// 	lastUpdated: null
-	// };
 
-	function handleToggleAlertModal() {
+	$listedTeams = getTeams();
+
+	function handleToggleAlertModal(): void {
 		$isAlertModalOpen = !$isAlertModalOpen;
 		$listedTeams = getTeams();
 	}
-	async function showTeamModal(team: string | null) {
-		if (team) {
-			$selectedTeam = team;
-		}
+	function showTeamModal(team: string | null) {
+		if (team) $selectedTeam = team;
 		$isTeamModalOpen = true;
 	}
 	function handleAddTeam() {
 		$editableTeam = true;
-		$isTeamModalOpen = true;
 		$newTeam = true;
+		showTeamModal(null);
 	}
 	function handleSeeTeam(team: string) {
 		$editableTeam = false;
@@ -62,7 +44,9 @@
 
 <main>
 	<h1 class="crud-clubs-title">Premiere League</h1>
-	{#await $listedTeams then teams}
+	{#await $listedTeams}
+		<p>Loading...</p>
+	{:then teams}
 		<div class="crud-clubs-team-info">
 			<p>Currently you have {teams.length} teams listed</p>
 			<button

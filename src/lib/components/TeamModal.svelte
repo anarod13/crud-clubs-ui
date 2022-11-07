@@ -10,10 +10,51 @@
 	} from '../store/store';
 	import type Team from '../entities/Team';
 	import { getTeam, handleUpdateTeam, handleUploadTeamCrest } from '../application/crudClubs';
+	import type ITeamMember from '../entities/ITeamMember';
+	import type IActiveCompetition from '$lib/entities/IActiveCompetition';
 
 	export let updateAction: (team: string) => void;
 	const SERVER_URL = 'http://localhost:8080';
 	let team: Team;
+	const emptyTeam: Team = {
+		id: 0,
+		country: '',
+		name: '',
+		shortName: '',
+		squad: [],
+		activeCompetitions: [],
+		tla: '',
+		crestUrl: '',
+		address: '',
+		phone: '',
+		website: '',
+		email: '',
+		founded: null,
+		clubColors: '',
+		venue: '',
+		lastUpdated: new Date().toLocaleString(),
+		mapTeamSquad: function (teamSquad: ITeamMember[]): ITeamMember[] {
+			throw new Error('Function not implemented.');
+		}
+	};
+	const newTeamMember = {
+		id: '',
+		name: '',
+		position: '',
+		dateOfBirth: '',
+		countryOfBirth: '',
+		nationality: '',
+		shirtNumber: null,
+		role: ''
+	};
+	const newActiveCompetition = {
+		id: '',
+		area: { id: 0, name: '' },
+		name: '',
+		code: '',
+		plan: '',
+		lastUpdated: ''
+	};
 
 	async function handleSaveTeam($selectedTeam: Team) {
 		try {
@@ -40,7 +81,25 @@
 	}
 
 	async function loadTeam() {
-		team = await getTeam($selectedTeam);
+		if ($newTeam) team = emptyTeam;
+		else {
+			team = await getTeam($selectedTeam);
+		}
+	}
+
+	function handleAddTeamCompetition(activeCompetitions: IActiveCompetition[]) {
+		if (activeCompetitions.length > 0 && !activeCompetitions[activeCompetitions.length - 1].name) {
+			return;
+		}
+		activeCompetitions.push(JSON.parse(JSON.stringify(newActiveCompetition)));
+		team.activeCompetitions = activeCompetitions;
+	}
+	function handleAddTeamMember(teamMembers: ITeamMember[]) {
+		if (teamMembers.length > 0 && !teamMembers[teamMembers.length - 1].name) {
+			return;
+		}
+		teamMembers.push(JSON.parse(JSON.stringify(newTeamMember)));
+		team.squad = teamMembers;
 	}
 </script>
 
@@ -119,14 +178,23 @@
 			</div>
 		</div>
 		<div class="crud-clubs-team-active-competitions-container">
-			<div class="crud-clubs-active-competition-title">Active competitions:</div>
+			<div class="crud-clubs-active-competition-title">
+				Active competitions:
+				{#if $editableTeam}<button
+						on:click={() => {
+							handleAddTeamCompetition(team.activeCompetitions);
+						}}>+</button
+					>
+				{/if}
+			</div>
 			<div class="crud-clubs-active-competition-details">
 				<tr>
 					<th class="crud-clubs-active-competition-name">Name</th>
 					<th class="crud-clubs-active-competition-country">Country</th>
 					<th class="crud-clubs-active-competition-code">Code</th>
 					<th class="crud-clubs-active-competition-plan">Plan</th>
-				</tr>{#each team.activeCompetitions as activeCompetition}
+				</tr>
+				{#each team.activeCompetitions as activeCompetition}
 					<tr>
 						<td><input readonly={!$editableTeam} bind:value={activeCompetition.name} /></td>
 						<td><input readonly={!$editableTeam} bind:value={activeCompetition.area.name} /></td>
@@ -136,7 +204,14 @@
 			</div>
 		</div>
 		<div class="crud-clubs-team-squad-container">
-			<div class="crud-clubs-team-squad-title">Squad:</div>
+			<div class="crud-clubs-team-squad-title">
+				Squad: {#if $editableTeam}<button
+						on:click={() => {
+							handleAddTeamMember(team.squad);
+						}}>+</button
+					>
+				{/if}
+			</div>
 			<div class="crud-clubs-team-squad">
 				<tr>
 					<th class="crud-clubs-team-member-name">Name</th>
