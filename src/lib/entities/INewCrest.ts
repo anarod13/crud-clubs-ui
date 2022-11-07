@@ -1,4 +1,4 @@
 export interface INewCrest {
-	id: number;
+	id: string;
 	newCrest: FormData;
 }

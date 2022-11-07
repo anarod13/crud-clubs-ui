@@ -18,6 +18,8 @@ import {
 	storeTeamsList
 } from '../storage/localStorage';
 
+const SERVER_URL = 'http://localhost:8080';
+
 export async function getTeams(): Promise<IListedTeam[]> {
 	let teamsList;
 	try {
@@ -56,6 +58,13 @@ export async function handleUpdateTeam(team: Team) {
 	} catch (e) {
 		console.error(e);
 	}
+}
+
+export async function handleUploadTeamCrest(team: Team, newCrest: FormData): Promise<Team> {
+	const newCrestUrl = await addTeamCreast({ id: team.tla, newCrest: newCrest });
+	team.crestUrl = `${SERVER_URL}/${newCrestUrl}`;
+	await updateLocalTeamData(team.tla, new TeamData(team));
+	return team;
 }
 
 async function updateLocalTeamData(team: string, updatedTeam: ITeam) {

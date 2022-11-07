@@ -9,7 +9,7 @@
 		isAlertModalOpen
 	} from '../store/store';
 	import type Team from '../entities/Team';
-	import { getTeam, handleUpdateTeam } from '../application/crudClubs';
+	import { getTeam, handleUpdateTeam, handleUploadTeamCrest } from '../application/crudClubs';
 
 	export let updateAction: (team: string) => void;
 	const SERVER_URL = 'http://localhost:8080';
@@ -31,7 +31,7 @@
 		const crestFile = new FormData();
 		if (teamCrest) {
 			crestFile.append('crest', teamCrest[0]);
-			await addTeamCreast({ id: team.id, newCrest: crestFile });
+			team = await handleUploadTeamCrest(team, crestFile);
 		}
 	}
 	async function handleDelete(team: string) {
@@ -60,7 +60,11 @@
 		<div class="crud-clubs-team-main-info-container">
 			<div class="crud-clubs-team-crest-container">
 				{#if team.crestUrl}
-					<img class="crud-clubs-team-crest" src={team.crestUrl} alt="" />{/if}
+					{#key team}
+						<img class="crud-clubs-team-crest" src={team.crestUrl} alt="" />
+					{/key}
+				{:else}
+					No crest found for this team!{/if}
 				{#if $editableTeam}
 					<label class="crud-clubs-add-crest-field">
 						{team.crestUrl ? "Update this team's crest" : 'Add a new crest'}<input
@@ -285,7 +289,6 @@
 		padding: 3px 10px;
 		font-family: 'Montserrat';
 		display: flex;
-		justify-items: center;
 		align-items: center;
 		cursor: pointer;
 	}

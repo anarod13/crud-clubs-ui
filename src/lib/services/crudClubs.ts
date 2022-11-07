@@ -63,7 +63,7 @@ export async function deleteTeam(team: string): Promise<boolean> {
 	return result.ok;
 }
 
-export async function addTeamCreast(teamCrest: INewCrest): Promise<boolean> {
+export async function addTeamCreast(teamCrest: INewCrest): Promise<string> {
 	const result = await fetch(`${SERVER_URL}/team/${teamCrest.id}/upload-crest`, {
 		method: 'POST',
 		headers: {
@@ -72,5 +72,5 @@ export async function addTeamCreast(teamCrest: INewCrest): Promise<boolean> {
 		body: teamCrest.newCrest
 	});
 
-	return result.ok;
+	return result.text();
 }
