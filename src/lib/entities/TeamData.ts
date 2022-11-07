@@ -27,7 +27,7 @@ export default class TeamData implements ITeam {
 		this.area = { id: 2072, name: team.country };
 		this.name = team.name;
 		this.activeCompetitions = team.activeCompetitions;
-		this.squad = team.squad;
+		this.squad = this.mapTeamSquad(team.squad);
 		this.shortName = team.shortName;
 		this.tla = team.tla;
 		this.crestUrl = team.crestUrl && this.getTeamCrestUrl(team.crestUrl);
@@ -43,5 +43,19 @@ export default class TeamData implements ITeam {
 
 	getTeamCrestUrl(crestUrl: string) {
 		return crestUrl.replace(`${SERVER_URL}/`, '');
+	}
+
+	mapTeamSquad(teamSquad: ITeamMember[]) {
+		teamSquad.forEach((teamMember) => {
+			const navigatorLanguage = navigator.language.slice(0, 2);
+			let day, month, year;
+			if (navigatorLanguage.toLowerCase() === 'en') {
+				[month, day, year] = teamMember.dateOfBirth.split('/');
+			} else {
+				[day, month, year] = teamMember.dateOfBirth.split('/');
+			}
+			teamMember.dateOfBirth = new Date(Number(year), Number(month) - 1, Number(day)).toISOString();
+		});
+		return teamSquad;
 	}
 }

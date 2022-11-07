@@ -25,7 +25,7 @@ export default class Team {
 		this.id = team.id;
 		this.name = team.name;
 		this.activeCompetitions = team.activeCompetitions;
-		this.squad = team.squad;
+		this.squad = this.mapTeamSquad(team.squad);
 		this.country = team.area.name;
 		this.shortName = team.shortName;
 		this.tla = team.tla;
@@ -38,5 +38,13 @@ export default class Team {
 		this.clubColors = team.clubColors;
 		this.venue = team.venue;
 		this.lastUpdated = new Date(team.lastUpdated).toLocaleString();
+	}
+
+	mapTeamSquad(teamSquad: ITeamMember[]) {
+		teamSquad.forEach(
+			(teamMember) =>
+				(teamMember.dateOfBirth = new Date(teamMember.dateOfBirth).toLocaleDateString())
+		);
+		return teamSquad;
 	}
 }
