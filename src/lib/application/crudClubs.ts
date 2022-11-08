@@ -1,4 +1,3 @@
-import type { INewCrest } from '../entities/INewCrest';
 import type ITeam from '../entities/ITeam';
 import TeamData from '../entities/TeamData';
 import Team from '../entities/Team';
@@ -8,6 +7,7 @@ import {
 	getTeams as getTeamsFromAPI,
 	deleteTeam,
 	updateTeam,
+	addTeam,
 	addTeamCreast
 } from '../services/crudClubs';
 import {
@@ -67,13 +67,23 @@ export async function handleUploadTeamCrest(team: Team, newCrest: FormData): Pro
 	return team;
 }
 
+export async function handleAddTeam(team: Team) {
+	const teamData = new TeamData(team);
+	try {
+		const newTeam = await addTeam(teamData);
+		updateLocalTeamData(newTeam.tla, newTeam);
+	} catch (e) {
+		console.error(e);
+	}
+}
+
 async function updateLocalTeamData(team: string, updatedTeam: ITeam) {
 	const teamData = new Team(updatedTeam);
 	storeTeam(team, teamData);
 	await updateTeamsList();
 }
 
-export async function updateTeamsList() {
+async function updateTeamsList() {
 	try {
 		const updatedTeamsList = await getTeamsFromAPI();
 		storeTeamsList(updatedTeamsList);

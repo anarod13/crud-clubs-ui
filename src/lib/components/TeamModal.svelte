@@ -1,6 +1,4 @@
 <script lang="ts">
-	import TeamData from '../entities/TeamData';
-	import { addTeam, addTeamCreast, updateTeam } from '../services/crudClubs';
 	import {
 		isTeamModalOpen,
 		editableTeam,
@@ -8,21 +6,25 @@
 		newTeam,
 		isAlertModalOpen
 	} from '../store/store';
-	import type Team from '../entities/Team';
-	import { getTeam, handleUpdateTeam, handleUploadTeamCrest } from '../application/crudClubs';
+	import Team from '../entities/Team';
+	import {
+		getTeam,
+		handleUpdateTeam,
+		handleUploadTeamCrest,
+		handleAddTeam
+	} from '../application/crudClubs';
 	import type ITeamMember from '../entities/ITeamMember';
 	import type IActiveCompetition from '$lib/entities/IActiveCompetition';
 
-	export let updateAction: (team: string) => void;
-	const SERVER_URL = 'http://localhost:8080';
 	let team: Team;
-	const emptyTeam: Team = {
+
+	const teamToAdd = new Team({
 		id: 0,
-		country: '',
+		area: { id: 0, name: '' },
+		activeCompetitions: [],
+		squad: [],
 		name: '',
 		shortName: '',
-		squad: [],
-		activeCompetitions: [],
 		tla: '',
 		crestUrl: '',
 		address: '',
@@ -32,16 +34,25 @@
 		founded: null,
 		clubColors: '',
 		venue: '',
+		lastUpdated: new Date().toLocaleDateString()
+	});
+
 	let isTeamValid: boolean;
 
-	async function handleSaveTeam($selectedTeam: Team) {
+	async function handleSaveTeam(teamData: Team) {
 		try {
-			// $newTeam ? await addTeam($selectedTeam) :
-			await handleUpdateTeam($selectedTeam);
-			$selectedTeam = await getTeam(team.tla);
+			$newTeam ? await handleNewTeam(teamData) : await handleUpdateTeam(teamData);
+			team = await getTeam(teamData.tla);
 			$editableTeam = false;
 		} catch (e) {
 			console.error(e);
+		}
+	}
+
+	async function handleNewTeam(teamData: Team) {
+		if (isTeamValid) {
+			await handleAddTeam(teamData);
+			$newTeam = false;
 		}
 	}
 
@@ -59,13 +70,22 @@
 	}
 
 	async function loadTeam() {
-		if ($newTeam) team = emptyTeam;
+		if ($newTeam) team = teamToAdd;
 		else {
 			team = await getTeam($selectedTeam);
 		}
 	}
 
 	function handleAddActiveCompetition(activeCompetitions: IActiveCompetition[]) {
+		const newActiveCompetition = {
+			id: '',
+			area: { id: 0, name: '' },
+			name: '',
+			code: '',
+			plan: '',
+			lastUpdated: ''
+		};
+
 		if (activeCompetitions.length > 0 && !activeCompetitions[activeCompetitions.length - 1].name) {
 			return;
 		}
@@ -73,6 +93,16 @@
 		team.activeCompetitions = activeCompetitions;
 	}
 	function handleAddTeamMember(teamMembers: ITeamMember[]) {
+		const newTeamMember = {
+			id: '',
+			name: '',
+			position: '',
+			dateOfBirth: '',
+			countryOfBirth: '',
+			nationality: '',
+			shirtNumber: null,
+			role: ''
+		};
 		if (teamMembers.length > 0 && !teamMembers[teamMembers.length - 1].name) {
 			return;
 		}
