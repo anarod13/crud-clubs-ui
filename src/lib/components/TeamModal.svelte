@@ -32,29 +32,7 @@
 		founded: null,
 		clubColors: '',
 		venue: '',
-		lastUpdated: new Date().toLocaleString(),
-		mapTeamSquad: function (teamSquad: ITeamMember[]): ITeamMember[] {
-			throw new Error('Function not implemented.');
-		}
-	};
-	const newTeamMember = {
-		id: '',
-		name: '',
-		position: '',
-		dateOfBirth: '',
-		countryOfBirth: '',
-		nationality: '',
-		shirtNumber: null,
-		role: ''
-	};
-	const newActiveCompetition = {
-		id: '',
-		area: { id: 0, name: '' },
-		name: '',
-		code: '',
-		plan: '',
-		lastUpdated: ''
-	};
+	let isTeamValid: boolean;
 
 	async function handleSaveTeam($selectedTeam: Team) {
 		try {
@@ -111,6 +89,12 @@
 		team.squad = teamMembers;
 	}
 
+	function validateTeam() {
+		if (team.tla && team.name) isTeamValid = true;
+		else {
+			isTeamValid = false;
+		}
+	}
 </script>
 
 <button
@@ -148,6 +132,17 @@
 				{/if}
 			</div>
 			<div class="crud-clubs-team-details">
+				{#if $editableTeam}
+					<label class="crub-clubs-detail-slot"
+						>Name: <input
+							name="tla"
+							type="text"
+							on:change={() => {
+								validateTeam();
+							}}
+							bind:value={team.name}
+						/></label
+					>{/if}
 				<label class="crub-clubs-detail-slot"
 					>Adress: <input
 						name="adress"
@@ -157,7 +152,15 @@
 					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>TLA: <input name="tla" type="text" readonly={!$newTeam} bind:value={team.tla} /></label
+					>TLA: <input
+						name="tla"
+						type="text"
+						readonly={!$newTeam}
+						on:change={() => {
+							validateTeam();
+						}}
+						bind:value={team.tla}
+					/></label
 				>
 				<label class="crub-clubs-detail-slot"
 					>Phone: <input
@@ -280,6 +283,7 @@
 			><button
 				type="button"
 				class="crud-clubs-btn"
+				disabled={!isTeamValid}
 				on:click={() => {
 					handleSaveTeam(team);
 				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-save.png" alt="Save" /></button
