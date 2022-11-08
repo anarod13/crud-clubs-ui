@@ -87,20 +87,30 @@
 		}
 	}
 
-	function handleAddTeamCompetition(activeCompetitions: IActiveCompetition[]) {
+	function handleAddActiveCompetition(activeCompetitions: IActiveCompetition[]) {
 		if (activeCompetitions.length > 0 && !activeCompetitions[activeCompetitions.length - 1].name) {
 			return;
 		}
-		activeCompetitions.push(JSON.parse(JSON.stringify(newActiveCompetition)));
+		activeCompetitions.push({ ...newActiveCompetition });
 		team.activeCompetitions = activeCompetitions;
 	}
 	function handleAddTeamMember(teamMembers: ITeamMember[]) {
 		if (teamMembers.length > 0 && !teamMembers[teamMembers.length - 1].name) {
 			return;
 		}
-		teamMembers.push(JSON.parse(JSON.stringify(newTeamMember)));
+		teamMembers.push({ ...newTeamMember });
 		team.squad = teamMembers;
 	}
+
+	function handleRemoveActiveCompetition(activeCompetitons: IActiveCompetition[]) {
+		if (activeCompetitons.length > 0) activeCompetitons.pop();
+		team.activeCompetitions = activeCompetitons;
+	}
+	function handleRemoveTeamMember(teamMembers: ITeamMember[]) {
+		if (teamMembers.length > 0) teamMembers.pop();
+		team.squad = teamMembers;
+	}
+
 </script>
 
 <button
@@ -147,7 +157,7 @@
 					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>TLA: <input name="tla" type="text" readonly bind:value={team.tla} /></label
+					>TLA: <input name="tla" type="text" readonly={!$newTeam} bind:value={team.tla} /></label
 				>
 				<label class="crub-clubs-detail-slot"
 					>Phone: <input
@@ -180,11 +190,23 @@
 		<div class="crud-clubs-team-active-competitions-container">
 			<div class="crud-clubs-active-competition-title">
 				Active competitions:
-				{#if $editableTeam}<button
-						on:click={() => {
-							handleAddTeamCompetition(team.activeCompetitions);
-						}}>+</button
-					>
+				{#if $editableTeam}<div class="crud-clubs-btn-container">
+						<button
+							type="button"
+							class="crud-clubs-btn"
+							on:click={() => {
+								handleAddActiveCompetition(team.activeCompetitions);
+							}}>+</button
+						>
+						<button
+							type="button"
+							class="crud-clubs-btn"
+							disabled={!team.activeCompetitions.length}
+							on:click={() => {
+								handleRemoveActiveCompetition(team.activeCompetitions);
+							}}>-</button
+						>
+					</div>
 				{/if}
 			</div>
 			<div class="crud-clubs-active-competition-details">
@@ -205,11 +227,22 @@
 		</div>
 		<div class="crud-clubs-team-squad-container">
 			<div class="crud-clubs-team-squad-title">
-				Squad: {#if $editableTeam}<button
-						on:click={() => {
-							handleAddTeamMember(team.squad);
-						}}>+</button
-					>
+				Squad: {#if $editableTeam}<div class="crud-clubs-btn-container">
+						<button
+							type="button"
+							class="crud-clubs-btn"
+							on:click={() => {
+								handleAddTeamMember(team.squad);
+							}}>+</button
+						><button
+							type="button"
+							class="crud-clubs-btn"
+							disabled={!team.squad.length}
+							on:click={() => {
+								handleRemoveTeamMember(team.squad);
+							}}>-</button
+						>
+					</div>
 				{/if}
 			</div>
 			<div class="crud-clubs-team-squad">
@@ -236,12 +269,13 @@
 				{/each}
 			</div>
 		</div>
-		<div class="crud-clubs-btn-container">
+		<div class="crud-clubs-main-btn-container">
 			<button
 				type="button"
 				class="crud-clubs-btn"
+				disabled={$newTeam || $editableTeam}
 				on:click={() => {
-					updateAction(team.tla);
+					$editableTeam = true;
 				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-edit.png" alt="Edit" /></button
 			><button
 				type="button"
@@ -252,6 +286,7 @@
 			><button
 				type="button"
 				class="crud-clubs-btn"
+				disabled={$newTeam}
 				on:click={() => {
 					handleDelete(team.tla);
 				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-trash.png" alt="Delete" /></button
@@ -298,7 +333,24 @@
 		flex-direction: column;
 		color: #f7ebe8;
 	}
+	.crud-clubs-active-competition-title,
+	.crud-clubs-team-squad-title {
+		display: flex;
+		width: 90%;
+		justify-content: space-between;
+		/* color: #b4b1b1; */
+		font-weight: bolder;
+		font-size: 18px;
+		text-shadow: rgba(0, 0, 0, 0.687) 0.1em 0.1em 0.3em;
+		align-items: center;
+		margin: 15px;
+	}
 
+	.crud-clubs-btn-container {
+		display: flex;
+		justify-content: flex-end;
+		width: 30%;
+	}
 	.crud-clubs-active-competition-details {
 		width: 100%;
 		display: flex;
@@ -391,7 +443,7 @@
 		padding: 3px 10px;
 		font-family: 'Montserrat';
 	}
-	.crud-clubs-btn-container {
+	.crud-clubs-main-btn-container {
 		padding: 10px;
 		display: flex;
 		justify-content: center;
@@ -408,10 +460,18 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		color: #b4b1b1;
+		text-shadow: rgba(0, 0, 0, 0.687) 0.1em 0.1em 0.3em;
+		font-weight: bolder;
 	}
 	.crud-clubs-btn-icon {
 		height: 20px;
 		width: 20px;
+	}
+
+	.crud-clubs-btn:disabled {
+		background-color: #9b9694;
+		cursor: not-allowed;
 	}
 	.crud-clubs-btn:hover {
 		transition: 0.15s;
