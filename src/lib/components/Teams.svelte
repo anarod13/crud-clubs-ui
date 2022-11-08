@@ -91,11 +91,7 @@
 		</table>
 	{/await}
 	{#if $isTeamModalOpen}
-		<TeamModal
-			updateAction={(team) => {
-				handleUpdateTeam(team);
-			}}
-		/>
+		<TeamModal />
 	{/if}
 	{#if $isAlertModalOpen}
 		<AlertModal handleToggleAlertModal={() => handleToggleAlertModal()} />
