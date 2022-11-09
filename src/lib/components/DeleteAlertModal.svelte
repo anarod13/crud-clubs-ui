@@ -50,9 +50,16 @@
 		border: none;
 		background-color: transparent;
 		color: #f7ebe8;
+		border-radius: 8px;
+		margin: 5px;
 		cursor: pointer;
 		font-family: 'Montserrat';
 		font-size: 16px;
-		padding: 10px;
+		padding: 7px;
+	}
+	button:hover {
+		transition: 0.15s;
+		background-color: #9b9694;
+		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	}
 </style>
