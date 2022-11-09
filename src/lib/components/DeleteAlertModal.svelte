@@ -1,12 +1,23 @@
 <script lang="ts">
+	import type IAlertMessage from '../entities/IAlertMessage';
 	import { handleDeleteTeam } from '../application/crudClubs';
-	import { selectedTeam, isTeamModalOpen } from '../store/store';
+	import { selectedTeam, isTeamModalOpen, isAlertModalVisible, alertMessage } from '../store/store';
 	export let handleToggleDeleteAlertModal: () => void;
 
 	async function handleDeleteTeamBtn(team: string) {
-		await handleDeleteTeam(team);
-		$isTeamModalOpen = false;
-		handleToggleDeleteAlertModal();
+		try {
+			await handleDeleteTeam(team);
+			showAlertModal('deletedTeam');
+			$isTeamModalOpen = false;
+			handleToggleDeleteAlertModal();
+		} catch (e) {
+			showAlertModal('error');
+		}
+	}
+
+	function showAlertModal(alert: keyof IAlertMessage) {
+		$alertMessage = alert;
+		$isAlertModalVisible = !$isAlertModalVisible;
 	}
 </script>
 

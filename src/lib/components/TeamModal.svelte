@@ -4,7 +4,9 @@
 		editableTeam,
 		selectedTeam,
 		newTeam,
-		isDeleteAlertModalOpen
+		isDeleteAlertModalOpen,
+		alertMessage,
+		isAlertModalVisible
 	} from '../store/store';
 	import Team from '../entities/Team';
 	import {
@@ -14,7 +16,8 @@
 		handleAddTeam
 	} from '../application/crudClubs';
 	import type ITeamMember from '../entities/ITeamMember';
-	import type IActiveCompetition from '$lib/entities/IActiveCompetition';
+	import type IActiveCompetition from '../entities/IActiveCompetition';
+	import type IAlertMessage from '../entities/IAlertMessage';
 
 	let team: Team;
 
@@ -42,10 +45,11 @@
 	async function handleSaveTeam(teamData: Team) {
 		try {
 			$newTeam ? await handleNewTeam(teamData) : await handleUpdateTeam(teamData);
+			showAlertModal($newTeam ? 'newTeamAdded' : 'teamEdited');
 			team = await getTeam(teamData.tla);
 			$editableTeam = false;
 		} catch (e) {
-			console.error(e);
+			showAlertModal('error');
 		}
 	}
 
@@ -61,9 +65,20 @@
 		const crestFile = new FormData();
 		if (teamCrest) {
 			crestFile.append('crest', teamCrest[0]);
-			team = await handleUploadTeamCrest(team, crestFile);
+			try {
+				team = await handleUploadTeamCrest(team, crestFile);
+				showAlertModal('crestAdded');
+			} catch (e) {
+				showAlertModal('error');
+			}
 		}
 	}
+
+	function showAlertModal(alert: keyof IAlertMessage) {
+		$alertMessage = alert;
+		$isAlertModalVisible = !$isAlertModalVisible;
+	}
+
 	async function handleDelete(team: string) {
 		$selectedTeam = team;
 		$isDeleteAlertModalOpen = true;

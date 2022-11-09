@@ -1,9 +1,11 @@
 <script>
+	import AlertModal from '$lib/components/AlertModal.svelte';
 	import Teams from '../lib/components/Teams.svelte';
 </script>
 
 <main>
 	<Teams />
+	<AlertModal />
 </main>
 
 <style>
