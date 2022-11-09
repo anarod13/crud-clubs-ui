@@ -4,7 +4,7 @@
 		editableTeam,
 		selectedTeam,
 		newTeam,
-		isAlertModalOpen
+		isDeleteAlertModalOpen
 	} from '../store/store';
 	import Team from '../entities/Team';
 	import {
@@ -66,13 +66,14 @@
 	}
 	async function handleDelete(team: string) {
 		$selectedTeam = team;
-		$isAlertModalOpen = true;
+		$isDeleteAlertModalOpen = true;
 	}
 
 	async function loadTeam() {
 		if ($newTeam) team = teamToAdd;
 		else {
 			team = await getTeam($selectedTeam);
+			validateTeam();
 		}
 	}
 
@@ -120,7 +121,7 @@
 	}
 
 	function validateTeam() {
-		if (team.tla && team.name) isTeamValid = true;
+		if (team.tla.length === 3 && team.name.length >= 3) isTeamValid = true;
 		else {
 			isTeamValid = false;
 		}

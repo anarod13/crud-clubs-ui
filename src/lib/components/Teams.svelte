@@ -4,17 +4,17 @@
 		isTeamModalOpen,
 		editableTeam,
 		newTeam,
-		isAlertModalOpen,
+		isDeleteAlertModalOpen,
 		listedTeams
 	} from '../store/store';
-	import AlertModal from './AlertModal.svelte';
+	import DeleteAlertModal from './DeleteAlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
 	import { getTeams, getTeam } from '../application/crudClubs';
 
 	$listedTeams = getTeams();
 
-	function handleToggleAlertModal(): void {
-		$isAlertModalOpen = !$isAlertModalOpen;
+	function handleToggleDeleteAlertModal(): void {
+		$isDeleteAlertModalOpen = !$isDeleteAlertModalOpen;
 		$listedTeams = getTeams();
 	}
 	function showTeamModal(team: string | null) {
@@ -38,7 +38,7 @@
 
 	async function handleDelete(team: string) {
 		$selectedTeam = team;
-		$isAlertModalOpen = true;
+		$isDeleteAlertModalOpen = true;
 	}
 </script>
 
@@ -93,8 +93,8 @@
 	{#if $isTeamModalOpen}
 		<TeamModal />
 	{/if}
-	{#if $isAlertModalOpen}
-		<AlertModal handleToggleAlertModal={() => handleToggleAlertModal()} />
+	{#if $isDeleteAlertModalOpen}
+		<DeleteAlertModal handleToggleDeleteAlertModal={() => handleToggleDeleteAlertModal()} />
 	{/if}
 </main>
 
