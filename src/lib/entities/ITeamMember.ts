@@ -5,6 +5,6 @@ export default interface ITeamMember {
 	dateOfBirth: string;
 	countryOfBirth: string;
 	nationality: string;
-	shirtNumber: number;
+	shirtNumber: number | null;
 	role: string;
 }

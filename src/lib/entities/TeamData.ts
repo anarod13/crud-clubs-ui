@@ -47,14 +47,24 @@ export default class TeamData implements ITeam {
 
 	mapTeamSquad(teamSquad: ITeamMember[]) {
 		teamSquad.forEach((teamMember) => {
-			const navigatorLanguage = navigator.language.slice(0, 2);
-			let day, month, year;
-			if (navigatorLanguage.toLowerCase() === 'en') {
-				[month, day, year] = teamMember.dateOfBirth.split('/');
-			} else {
-				[day, month, year] = teamMember.dateOfBirth.split('/');
+			if (teamMember.dateOfBirth) {
+				const navigatorLanguage = navigator.language.slice(0, 2);
+				let day, month, year;
+				if (navigatorLanguage.toLowerCase() === 'en') {
+					[month, day, year] = teamMember.dateOfBirth.split('/');
+				} else {
+					[day, month, year] = teamMember.dateOfBirth.split('/');
+				}
+				try {
+					teamMember.dateOfBirth = new Date(
+						Number(year),
+						Number(month) - 1,
+						Number(day)
+					).toISOString();
+				} catch (e) {
+					teamMember.dateOfBirth = 'Invalid Date';
+				}
 			}
-			teamMember.dateOfBirth = new Date(Number(year), Number(month) - 1, Number(day)).toISOString();
 		});
 		return teamSquad;
 	}
