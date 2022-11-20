@@ -2,7 +2,7 @@ import type { INewCrest } from '../entities/INewCrest';
 import type ITeam from '../entities/ITeam';
 import type IListedTeam from '../entities/IListedTeam';
 
-const SERVER_URL = 'http://localhost:8080';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 export async function getTeams(): Promise<IListedTeam[]> {
 	const result = await fetch(`${SERVER_URL}`, {

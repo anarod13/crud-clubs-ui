@@ -2,7 +2,7 @@ import type IActiveCompetition from './IActiveCompetition';
 import type ITeamMember from './ITeamMember';
 import type ITeam from './ITeam';
 
-const SERVER_URL = 'http://localhost:8080';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 export default class Team {
 	id: number;
