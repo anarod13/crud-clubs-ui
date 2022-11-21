@@ -1,7 +1,7 @@
 export default interface ITeamMember {
-	id: string;
+	id: number;
 	name: string;
-	position: string;
+	position: string | null;
 	dateOfBirth: string;
 	countryOfBirth: string;
 	nationality: string;

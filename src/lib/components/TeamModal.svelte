@@ -94,7 +94,7 @@
 
 	function handleAddActiveCompetition(activeCompetitions: IActiveCompetition[]) {
 		const newActiveCompetition = {
-			id: '',
+			id: 0,
 			area: { id: 0, name: '' },
 			name: '',
 			code: '',
@@ -110,7 +110,7 @@
 	}
 	function handleAddTeamMember(teamMembers: ITeamMember[]) {
 		const newTeamMember = {
-			id: '',
+			id: 0,
 			name: '',
 			position: '',
 			dateOfBirth: '',
