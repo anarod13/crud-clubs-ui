@@ -5,25 +5,13 @@ import type IListedTeam from '../entities/IListedTeam';
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 export async function getTeams(): Promise<IListedTeam[]> {
-	const result = await fetch(`${SERVER_URL}`, {
-		method: 'GET',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json'
-		}
-	});
+	const result = await fetch(`${SERVER_URL}`);
 	return result.json();
 }
 
 export async function getTeam(team: string): Promise<ITeam> {
-	const result = await fetch(`${SERVER_URL}/team/${team}`, {
-		method: 'GET',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json'
-		}
-	});
-	return await result.json();
+	const result = await fetch(`${SERVER_URL}/team/${team}`);
+	return result.json();
 }
 
 export async function updateTeam(team: ITeam) {
