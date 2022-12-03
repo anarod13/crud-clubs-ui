@@ -181,7 +181,7 @@
 				{#if $editableTeam}
 					<label class="crub-clubs-detail-slot"
 						>Name: <input
-							name="tla"
+							name="name"
 							type="text"
 							on:change={() => {
 								validateTeam();
@@ -217,22 +217,47 @@
 					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>Website: <input type="text" readonly={!$editableTeam} bind:value={team.website} /></label
+					>Website: <input
+						type="text"
+						name="website"
+						readonly={!$editableTeam}
+						bind:value={team.website}
+					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>Email: <input type="text" readonly={!$editableTeam} bind:value={team.email} /></label
+					>Email: <input
+						type="text"
+						name="email"
+						readonly={!$editableTeam}
+						bind:value={team.email}
+					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>Founded: <input readonly={!$editableTeam} bind:value={team.founded} /></label
+					>Founded: <input
+						type="number"
+						name="founded"
+						readonly={!$editableTeam}
+						bind:value={team.founded}
+					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>Club Colors: <input type="text" readonly={!$editableTeam} bind:value={team.clubColors} />
+					>Club Colors: <input
+						type="text"
+						name="club-colors"
+						readonly={!$editableTeam}
+						bind:value={team.clubColors}
+					/>
 				</label>
 				<label class="crub-clubs-detail-slot"
-					>Venue: <input type="text" readonly={!$editableTeam} bind:value={team.venue} /></label
+					>Venue: <input
+						type="text"
+						name="venue"
+						readonly={!$editableTeam}
+						bind:value={team.venue}
+					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>Last Updated: <input type="text" readonly value={team.lastUpdated} />
+					>Last Updated: <input name="last-updated" readonly value={team.lastUpdated} />
 				</label>
 			</div>
 		</div>
@@ -321,21 +346,21 @@
 		<div class="crud-clubs-main-btn-container">
 			<button
 				type="button"
-				class="crud-clubs-btn"
+				class="crud-clubs-edit-btn"
 				disabled={$newTeam || $editableTeam}
 				on:click={() => {
 					$editableTeam = true;
 				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-edit.png" alt="Edit" /></button
 			><button
 				type="button"
-				class="crud-clubs-btn"
+				class="crud-clubs-save-btn"
 				disabled={!isTeamValid}
 				on:click={() => {
 					handleSaveTeam(team);
 				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-save.png" alt="Save" /></button
 			><button
 				type="button"
-				class="crud-clubs-btn"
+				class="crud-clubs-delete-btn"
 				disabled={$newTeam}
 				on:click={() => {
 					handleDelete(team.tla);

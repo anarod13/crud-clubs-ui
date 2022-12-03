@@ -43,7 +43,7 @@
 </script>
 
 <main>
-	<h1 class="crud-clubs-title">Premiere League</h1>
+	<h1 class="crud-clubs-title">Premier League</h1>
 	{#await $listedTeams}
 		<p>Loading...</p>
 	{:then teams}
@@ -59,28 +59,31 @@
 		</div>
 		<table class="crud-clubs-teams-table">
 			<tr class="crud-clubs-team-table-head">
-				<th class="crud-clubs-team-logo-container">Team</th>
-				<th class="crud-clubs-team-name">Country</th>
+				<th class="crud-clubs-team-name-title">Team</th>
+				<th class="crud-clubs-team-country-title">Country</th>
 
-				<th class="crud-clubs-actions-container">Actions</th>
+				<th class="crud-clubs-actions-title">Actions</th>
 			</tr>
 			{#each teams as team}
 				<tr class="crud-clubs-team-row">
 					<td class="crud-clubs-team-name">{team.name}</td>
-					<td class="crud-clubs-team-name">{team.area.name}</td>
+					<td class="crud-clubs-team-country">{team.area.name}</td>
 					<td class="crud-clubs-actions-container"
 						><button
 							type="button"
+							class="crud-clubs-see-team-btn"
 							on:click={() => {
 								handleSeeTeam(team.tla);
 							}}><img src="./src/assets/bx-football.png" alt="See" /></button
 						><button
 							type="button"
+							class="crud-clubs-edit-team-btn"
 							on:click={() => {
 								handleUpdateTeam(team.tla);
 							}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
 						><button
 							type="button"
+							class="crud-clubs-delete-team-btn"
 							on:click={() => {
 								handleDelete(team.tla);
 							}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
@@ -132,26 +135,32 @@
 		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	}
 
-	.crud-clubs-team-logo-container {
-		display: flex;
-		justify-content: center;
-		width: 15%;
-	}
 	.crud-clubs-team-name {
-		width: 50%;
+		width: 30%;
+	}
+	.crud-clubs-team-country {
+		width: 30%;
+		margin-left: 10px;
 	}
 	.crud-clubs-actions-container {
-		width: 25%;
+		width: 30%;
 		display: flex;
 		justify-content: center;
 	}
 	.crud-clubs-team-table-head {
 		display: flex;
-		justify-content: space-around;
+		justify-content: space-evenly;
 		flex-wrap: nowrap;
 		width: 100%;
 		padding: 10px;
 		font-weight: bolder;
+	}
+	.crud-clubs-team-table-head th {
+		width: 30%;
+		text-align: left;
+	}
+	th:last-child {
+		text-align: center;
 	}
 	.crud-clubs-team-row {
 		display: flex;

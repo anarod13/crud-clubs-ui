@@ -11,6 +11,7 @@
 			$isTeamModalOpen = false;
 			handleToggleDeleteAlertModal();
 		} catch (e) {
+			console.log('error');
 			showAlertModal('error');
 		}
 	}
@@ -21,7 +22,7 @@
 	}
 </script>
 
-<div class="crud-clubs-modal-container">
+<div class="crud-clubs-delete-modal-container">
 	<p>Are you sure you want to delete <strong>{$selectedTeam}</strong> from the list?</p>
 	<div>
 		<button
@@ -42,7 +43,7 @@
 </div>
 
 <style>
-	.crud-clubs-modal-container {
+	.crud-clubs-delete-modal-container {
 		position: fixed;
 		top: 10%;
 		background-color: #444140;
