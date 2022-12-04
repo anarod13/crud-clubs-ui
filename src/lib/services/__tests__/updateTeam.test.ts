@@ -2,7 +2,7 @@ import { vi, it, expect } from 'vitest';
 import { updateTeam } from '../crudClubs';
 import mockTeam from '../../../../cypress/fixtures/mockTeam.json';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const SERVER_URL = process.env.VITE_SERVER_URL;
 
 it('Should update a team', async () => {
 	global.fetch = vi.fn(() =>
