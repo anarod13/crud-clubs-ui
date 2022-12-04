@@ -9,7 +9,8 @@
 	} from '../store/store';
 	import DeleteAlertModal from './DeleteAlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
-	import { getTeams } from '../application/crudClubs';
+	import { getTeams, updateTeamsList } from '../application/crudClubs';
+	import refreshIcon from '../../assets/bx-refresh.png';
 	import footballIcon from '../../assets/bx-football.png';
 	import editIcon from '../../assets/bx-edit.png';
 	import deleteIcon from '../../assets/bx-trash.png';
@@ -44,6 +45,11 @@
 		$selectedTeam = team;
 		$isDeleteAlertModalOpen = true;
 	}
+
+	async function handleUpdateListedTeams() {
+		await updateTeamsList();
+		$listedTeams = getTeams();
+	}
 </script>
 
 <main>
@@ -53,13 +59,21 @@
 	{:then teams}
 		<div class="crud-clubs-team-info">
 			<p>Currently you have {teams.length} teams listed</p>
-			<button
-				type="button"
-				class="crud-clubs-btn add-team-btn"
-				on:click={() => {
-					handleAddTeam();
-				}}>Add Team</button
-			>
+			<div class="crud-clubs-btn-container">
+				<button
+					type="button"
+					class="crud-clubs-btn add-team-btn"
+					on:click={() => {
+						handleAddTeam();
+					}}>Add Team</button
+				><button
+					type="button"
+					class="crud-clubs-btn refresh-btn"
+					on:click={() => {
+						handleUpdateListedTeams();
+					}}><img src={refreshIcon} alt="Refresh" /></button
+				>
+			</div>
 		</div>
 		<table class="crud-clubs-teams-table">
 			<tr class="crud-clubs-team-table-head">
@@ -119,9 +133,17 @@
 	.crud-clubs-team-info {
 		display: flex;
 		justify-content: space-between;
-		width: 45%;
+		width: 50%;
 		align-items: center;
+		padding: 0px 10px;
 		margin: 5px;
+		box-sizing: border-box;
+	}
+	.crud-clubs-btn-container {
+		display: flex;
+		width: 30%;
+		justify-content: flex-end;
+		align-items: center;
 	}
 
 	.crud-clubs-teams-table {
@@ -194,9 +216,9 @@
 		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	}
 	.add-team-btn {
-		margin: 10px;
+		margin: 10px 5px;
 		color: #f7ebe8;
-		width: 15%;
+		width: 50%;
 		font-size: 16px;
 	}
 

@@ -83,7 +83,7 @@ async function updateLocalTeamData(team: string, updatedTeam: ITeam) {
 	await updateTeamsList();
 }
 
-async function updateTeamsList() {
+export async function updateTeamsList() {
 	try {
 		const updatedTeamsList = await getTeamsFromAPI();
 		storeTeamsList(updatedTeamsList);
