@@ -140,7 +140,7 @@
 	}
 
 	function validateTeam() {
-		if (team.tla.length === 3 && team.name.length >= 3) isTeamValid = true;
+		if (team.tla.length >= 3 && team.name.length >= 3) isTeamValid = true;
 		else {
 			isTeamValid = false;
 		}
@@ -167,8 +167,8 @@
 						<img class="crud-clubs-team-crest" src={team.crestUrl} alt="" />
 					{/key}
 				{:else}
-					No crest found for this team!{/if}
-				{#if $editableTeam}
+					{$newTeam ? "Create a team to add it's crest!" : 'No crest found for this team!'}{/if}
+				{#if $editableTeam && !$newTeam}
 					<label class="crud-clubs-add-crest-field">
 						{team.crestUrl ? "Update this team's crest" : 'Add a new crest'}<input
 							on:change={(e) => {
@@ -259,10 +259,10 @@
 						readonly={!$editableTeam}
 						bind:value={team.venue}
 					/></label
-				>
-				<label class="crub-clubs-detail-slot"
-					>Last Updated: <input name="last-updated" readonly value={team.lastUpdated} />
-				</label>
+				>{#if !$newTeam}
+					<label class="crub-clubs-detail-slot"
+						>Last Updated: <input name="last-updated" readonly value={team.lastUpdated} />
+					</label>{/if}
 			</div>
 		</div>
 		<div class="crud-clubs-team-active-competitions-container">
