@@ -36,7 +36,7 @@
 
 <style>
 	.crud-clubs-modal-container {
-		position: absolute;
+		position: fixed;
 		z-index: 10;
 		top: 5%;
 		right: 2%;
@@ -46,8 +46,7 @@
 		font-size: 12px;
 		border-radius: 10px;
 		padding: 0px 10px;
-		/* width: 20%;
-		height: 40px; */
+		height: 40px;
 		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 		display: flex;
 		justify-content: flex-end;

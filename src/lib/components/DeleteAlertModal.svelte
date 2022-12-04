@@ -11,7 +11,6 @@
 			$isTeamModalOpen = false;
 			handleToggleDeleteAlertModal();
 		} catch (e) {
-			console.log('error');
 			showAlertModal('error');
 		}
 	}
@@ -27,14 +26,14 @@
 	<div>
 		<button
 			type="button"
-			class="crud-clubs-btn"
+			class="crud-clubs-btn confirm-delete-btn"
 			on:click={(e) => {
 				e.preventDefault();
 				handleDeleteTeamBtn($selectedTeam);
 			}}>YES</button
 		><button
 			type="button"
-			class="crud-clubs-btn"
+			class="crud-clubs-btn cancel-delete-btn"
 			on:click={() => {
 				handleToggleDeleteAlertModal();
 			}}>CANCEL</button

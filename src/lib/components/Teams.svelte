@@ -9,7 +9,10 @@
 	} from '../store/store';
 	import DeleteAlertModal from './DeleteAlertModal.svelte';
 	import TeamModal from './TeamModal.svelte';
-	import { getTeams, getTeam } from '../application/crudClubs';
+	import { getTeams } from '../application/crudClubs';
+	import footballIcon from '../../assets/bx-football.png';
+	import editIcon from '../../assets/bx-edit.png';
+	import deleteIcon from '../../assets/bx-trash.png';
 
 	$listedTeams = getTeams();
 
@@ -52,7 +55,7 @@
 			<p>Currently you have {teams.length} teams listed</p>
 			<button
 				type="button"
-				class="crud-clubs-add-team-btn"
+				class="crud-clubs-btn add-team-btn"
 				on:click={() => {
 					handleAddTeam();
 				}}>Add Team</button
@@ -72,22 +75,22 @@
 					<td class="crud-clubs-actions-container"
 						><button
 							type="button"
-							class="crud-clubs-see-team-btn"
+							class="crud-clubs-btn see-team-btn"
 							on:click={() => {
 								handleSeeTeam(team.tla);
-							}}><img src="./src/assets/bx-football.png" alt="See" /></button
+							}}><img src={footballIcon} alt="See" /></button
 						><button
 							type="button"
-							class="crud-clubs-edit-team-btn"
+							class="crud-clubs-btn edit-team-btn"
 							on:click={() => {
 								handleUpdateTeam(team.tla);
-							}}><img src="./src/assets/bx-edit.png" alt="Edit" /></button
+							}}><img src={editIcon} alt="Edit" /></button
 						><button
 							type="button"
-							class="crud-clubs-delete-team-btn"
+							class="crud-clubs-btn delete-team-btn"
 							on:click={() => {
 								handleDelete(team.tla);
-							}}><img src="./src/assets/bx-trash.png" alt="Delete" /></button
+							}}><img src={deleteIcon} alt="Delete" /></button
 						>
 					</td></tr
 				>
@@ -105,7 +108,7 @@
 <style>
 	main {
 		color: #f7ebe8;
-		font-family: 'Montserrat' !important;
+		font-family: 'Montserrat';
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -113,17 +116,12 @@
 
 		width: 100%;
 	}
-
-	.crud-clubs-add-team-btn {
-		border: none;
-		background-color: transparent;
-		font-size: 16px;
-		text-decoration: underline;
-		font-weight: bolder;
-		border-radius: 5px;
-		padding: 10px 15px;
-		margin: 10px;
-		color: #f7ebe8;
+	.crud-clubs-team-info {
+		display: flex;
+		justify-content: space-between;
+		width: 45%;
+		align-items: center;
+		margin: 5px;
 	}
 
 	.crud-clubs-teams-table {
@@ -172,11 +170,36 @@
 		margin: 0;
 		padding: 5px;
 	}
-	button {
-		border: none;
+	.crud-clubs-btn {
+		height: 30px;
+		width: 30px;
 		background-color: transparent;
+		border: none;
+		border-radius: 4.5px;
+		margin: 0px 5px;
 		cursor: pointer;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #b4b1b1;
 	}
+
+	.crud-clubs-btn:disabled {
+		background-color: #9b9694;
+		cursor: not-allowed;
+	}
+	.crud-clubs-btn:hover {
+		transition: 0.15s;
+		background-color: #9b9694;
+		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	}
+	.add-team-btn {
+		margin: 10px;
+		color: #f7ebe8;
+		width: 15%;
+		font-size: 16px;
+	}
+
 	img {
 		color: aliceblue;
 	}

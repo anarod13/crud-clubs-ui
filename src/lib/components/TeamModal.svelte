@@ -18,6 +18,10 @@
 	import type ITeamMember from '../entities/ITeamMember';
 	import type IActiveCompetition from '../entities/IActiveCompetition';
 	import type IAlertMessage from '../entities/IAlertMessage';
+	import saveIcon from '../../assets/bx-save.png';
+	import editIcon from '../../assets/bx-edit.png';
+	import deleteIcon from '../../assets/bx-trash.png';
+	import closeIcon from '../../assets/bx-close.png';
 
 	let team: Team;
 
@@ -148,7 +152,7 @@
 	class="crud-clubs-btn close-modal"
 	on:click={() => {
 		$isTeamModalOpen = false;
-	}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-close.png" alt="Close" /></button
+	}}><img class="crud-clubs-btn-icon" src={closeIcon} alt="Close" /></button
 >
 
 <main class="crud-clubs-team-modal">
@@ -346,25 +350,25 @@
 		<div class="crud-clubs-main-btn-container">
 			<button
 				type="button"
-				class="crud-clubs-edit-btn"
+				class="crud-clubs-btn edit-btn"
 				disabled={$newTeam || $editableTeam}
 				on:click={() => {
 					$editableTeam = true;
-				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-edit.png" alt="Edit" /></button
+				}}><img class="crud-clubs-btn-icon" src={editIcon} alt="Edit" /></button
 			><button
 				type="button"
-				class="crud-clubs-save-btn"
+				class="crud-clubs-btn save-btn"
 				disabled={!isTeamValid}
 				on:click={() => {
 					handleSaveTeam(team);
-				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-save.png" alt="Save" /></button
+				}}><img class="crud-clubs-btn-icon" src={saveIcon} alt="Save" /></button
 			><button
 				type="button"
-				class="crud-clubs-delete-btn"
+				class="crud-clubs-btn delete-btn"
 				disabled={$newTeam}
 				on:click={() => {
 					handleDelete(team.tla);
-				}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-trash.png" alt="Delete" /></button
+				}}><img class="crud-clubs-btn-icon" src={deleteIcon} alt="Delete" /></button
 			>
 		</div>
 	{/await}
