@@ -13,7 +13,7 @@ describe('Teams', () => {
 		cy.wait('@ListedTeams');
 		cy.get('.crud-clubs-title').contains('Premier League');
 		cy.get('.crud-clubs-team-info').children('p').contains('Currently you have 8 teams listed');
-		cy.get('.crud-clubs-add-team-btn').contains('Add Team');
+		cy.get('.crud-clubs-btn.add-team-btn').contains('Add Team');
 		cy.get('.crud-clubs-team-name-title').contains('Team');
 		cy.get('.crud-clubs-team-country-title').contains('Country');
 		cy.get('.crud-clubs-actions-title').contains('Actions');
@@ -25,7 +25,7 @@ describe('Teams', () => {
 		});
 	});
 	it('Should render a pop up to add a team', () => {
-		cy.get('.crud-clubs-add-team-btn').click();
+		cy.get('.crud-clubs-btn.add-team-btn').click();
 		cy.get('.crud-clubs-team-main-info-container').should('be.visible');
 		cy.get('input[name=name]').should('be.empty');
 		cy.get('input[name=tla]').should('be.empty');
@@ -40,17 +40,17 @@ describe('Teams', () => {
 			.children('p')
 			.contains('No active competitions registered');
 		cy.get('.crud-clubs-team-squad').children('p').contains('No team squad registered');
-		cy.get('.crud-clubs-edit-btn').first().should('be.disabled');
+		cy.get('.crud-clubs-btn.edit-btn').first().should('be.disabled');
 		cy.get('.crud-clubs-btn.close-modal').click();
 	});
 	it('Should delete a team', () => {
-		cy.get('.crud-clubs-delete-team-btn').first().click();
+		cy.get('.crud-clubs-btn.delete-team-btn').first().click();
 		cy.get('.crud-clubs-delete-modal-container').should('be.visible');
 		cy.get('.crud-clubs-delete-modal-container')
 			.children('p')
 			.contains('Are you sure you want to delete ARS from the list?');
-		cy.get('.crud-clubs-btn').last().contains('CANCEL');
-		cy.get('.crud-clubs-btn').first().click();
+		cy.get('.crud-clubs-btn.cancel-delete-btn').contains('CANCEL');
+		cy.get('.crud-clubs-btn.confirm-delete-btn').click();
 		cy.wait('@deleteTeam');
 		cy.get('.crud-clubs-modal-container').contains('Team successfully deleted!');
 		cy.get('.crud-clubs-delete-modal-container').should('not.exist');

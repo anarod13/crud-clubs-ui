@@ -15,8 +15,8 @@ describe('Teams', () => {
 	});
 	it('Should render modal with team data not editable', () => {
 		cy.visit('/');
-		cy.get('.crud-clubs-see-team-btn').first().click();
-		// cy.get('.crud-clubs-team-modal').children('div').first().contains('Loading...');
+		cy.get('.crud-clubs-btn.see-team-btn').first().click();
+		cy.get('.crud-clubs-team-modal').children('div').first().contains('Loading...');
 		cy.wait('@teamData');
 		const inputs = [];
 		cy.get('input')
@@ -93,11 +93,11 @@ describe('Teams', () => {
 				.should('contain', teamMember.role);
 		});
 	});
-	it('Should allow to edit team data', () => {
-		cy.get('.crud-clubs-edit-btn').click();
+	it('Should allow edition in team modal', () => {
+		cy.get('.crud-clubs-btn.edit-btn').click();
 		cy.get('input[name=phone]').clear().type('555');
 		cy.get('input[name=website]').clear().type('555');
-		cy.get('.crud-clubs-save-btn').click();
+		cy.get('.crud-clubs-btn.save-btn').click();
 		cy.get('.crud-clubs-modal-container').contains('Changes in team saved!');
 		cy.wait(2500);
 		cy.get('.crud-clubs-modal-container').should('not.exist');
