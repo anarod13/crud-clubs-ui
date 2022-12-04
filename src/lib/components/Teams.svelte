@@ -28,6 +28,7 @@
 	}
 	function handleSeeTeam(team: string) {
 		$editableTeam = false;
+		$newTeam = false;
 		showTeamModal(team);
 	}
 	function handleUpdateTeam(team: string) {

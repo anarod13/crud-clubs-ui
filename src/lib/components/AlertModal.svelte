@@ -6,7 +6,7 @@
 
 	const alertMessages: IAlertMessage = {
 		newTeamAdded: 'A new team was added!',
-		teamEdited: 'Changes in team saved',
+		teamEdited: 'Changes in team saved!',
 		crestAdded: 'Crest updated!',
 		deletedTeam: 'Team successfully deleted!',
 		error: 'Something came up, please try again!'

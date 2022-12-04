@@ -151,7 +151,7 @@
 	}}><img class="crud-clubs-btn-icon" src="./src/assets/bx-close.png" alt="Close" /></button
 >
 
-<main>
+<main class="crud-clubs-team-modal">
 	{#await loadTeam()}
 		<div>Loading...</div>
 	{:then}
