@@ -4,20 +4,18 @@
 import { vi, it, expect } from 'vitest';
 import { handleDeleteTeam } from '../crudClubs';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-
-const mockTeamTla = 'ARS';
-
 vi.spyOn(Storage.prototype, 'setItem');
 vi.spyOn(Storage.prototype, 'getItem');
 vi.spyOn(Storage.prototype, 'removeItem');
 
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
+mockFetch.mockResolvedValue({});
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const mockTeamTla = 'ARS';
+
 it('Should delete a team', async () => {
-	global.fetch = vi.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve()
-		})
-	) as any;
 	await handleDeleteTeam(mockTeamTla);
 	expect(global.fetch).toHaveBeenCalledTimes(2);
 	expect(global.fetch).toHaveBeenNthCalledWith(1, `${SERVER_URL}/team/${mockTeamTla}/delete`, {

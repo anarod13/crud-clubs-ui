@@ -6,18 +6,17 @@ import { getTeam } from '../crudClubs';
 import mockTeam from '../../../../cypress/fixtures/mockTeam.json';
 import mockStoredTeam from '../:./../../../../cypress/fixtures/mockStoredTeam.json';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-const mockTeamTla = 'ARS';
-
 vi.spyOn(Storage.prototype, 'setItem');
 vi.spyOn(Storage.prototype, 'getItem');
 
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
+mockFetch.mockResolvedValueOnce({ json: () => mockTeam });
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const mockTeamTla = 'ARS';
+
 it('Should request a team', async () => {
-	global.fetch = vi.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve(mockTeam)
-		})
-	) as any;
 	const team = await getTeam(mockTeamTla);
 	expect(team).toEqual(mockStoredTeam);
 	expect(global.fetch).toHaveBeenCalledTimes(1);

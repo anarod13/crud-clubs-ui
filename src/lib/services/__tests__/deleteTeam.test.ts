@@ -1,14 +1,13 @@
 import { vi, it, expect } from 'vitest';
 import { deleteTeam } from '../crudClubs';
 
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
+mockFetch.mockResolvedValueOnce({});
+
 const SERVER_URL = process.env.VITE_SERVER_URL;
 
 it('Should delete a team', async () => {
-	global.fetch = vi.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve()
-		})
-	) as any;
 	await deleteTeam('ARS');
 	expect(global.fetch).toHaveBeenCalledTimes(1);
 	expect(global.fetch).toHaveBeenCalledWith(`${SERVER_URL}/team/ARS/delete`, {

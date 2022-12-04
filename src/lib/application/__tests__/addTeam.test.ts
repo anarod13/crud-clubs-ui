@@ -12,6 +12,7 @@ import TeamData from '$lib/entities/TeamData';
 vi.spyOn(Storage.prototype, 'setItem');
 vi.spyOn(Storage.prototype, 'getItem');
 vi.useFakeTimers().setSystemTime(new Date('2022-10-10T17:17:21.576Z'));
+
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 mockFetch.mockResolvedValueOnce({ json: () => mockTeam });
@@ -23,12 +24,12 @@ const mockTeamData = new TeamData(mockNewTeam);
 
 it('Should add a new team', async () => {
 	await handleAddTeam(mockNewTeam);
-	expect(mockFetch).toHaveBeenCalledTimes(2);
-	expect(mockFetch).toHaveBeenNthCalledWith(1, `${SERVER_URL}/add`, {
+	expect(global.fetch).toHaveBeenCalledTimes(2);
+	expect(global.fetch).toHaveBeenNthCalledWith(1, `${SERVER_URL}/add`, {
 		method: 'POST',
 		headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
 		body: JSON.stringify(mockTeamData)
 	});
-	expect(mockFetch).toHaveBeenNthCalledWith(2, SERVER_URL);
+	expect(global.fetch).toHaveBeenNthCalledWith(2, SERVER_URL);
 	expect(localStorage.setItem).toHaveBeenCalledWith(mockNewTeam.tla, JSON.stringify(mockNewTeam));
 });
