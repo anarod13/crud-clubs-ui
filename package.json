@@ -39,6 +39,9 @@
 		],
 		"testEnvironment": "jsdom"
 	},
+	"engines": {
+		"node": ">=16.14"
+	},
 	"devDependencies": {
 		"@esbuild-plugins/node-globals-polyfill": "^0.1.1",
 		"@esbuild-plugins/node-modules-polyfill": "^0.1.4",
