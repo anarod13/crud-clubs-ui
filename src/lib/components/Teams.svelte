@@ -216,6 +216,7 @@
 		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	}
 	.add-team-btn {
+		font-family: 'Montserrat';
 		margin: 10px 5px;
 		color: #f7ebe8;
 		width: 50%;
@@ -224,5 +225,38 @@
 
 	img {
 		color: aliceblue;
+	}
+
+	@media (max-width: 1300px) {
+		.add-team-btn {
+			width: 100px;
+			padding: 5px;
+		}
+	}
+	@media (max-width: 1000px) {
+		.add-team-btn {
+			height: 50px;
+		}
+	}
+	@media (max-width: 760px) {
+		.crud-clubs-team-info {
+			width: 60%;
+		}
+		.add-team-btn {
+			width: 260px;
+			padding: 5px;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.crud-clubs-team-info {
+			width: 90%;
+		}
+	}
+	@media (max-width: 560px) {
+		.crud-clubs-teams-table {
+			width: 90%;
+			box-sizing: border-box;
+		}
 	}
 </style>

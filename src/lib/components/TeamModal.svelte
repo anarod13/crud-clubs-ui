@@ -89,8 +89,9 @@
 	}
 
 	async function loadTeam() {
-		if ($newTeam) team = teamToAdd;
-		else {
+		if ($newTeam) {
+			team = teamToAdd;
+		} else {
 			team = await getTeam($selectedTeam);
 			validateTeam();
 		}
@@ -325,7 +326,7 @@
 				{/if}
 			</div>
 			<div class="crud-clubs-team-squad">
-				<tr>
+				<tr class="crud-clubs-team-squad-table-head">
 					<th class="crud-clubs-team-member-name">Name</th>
 					<th class="crud-clubs-team-member-position">Position</th>
 					<th class="crud-clubs-team-member-birth-country">Date of Birth</th>
@@ -418,7 +419,6 @@
 		display: flex;
 		width: 90%;
 		justify-content: space-between;
-		/* color: #b4b1b1; */
 		font-weight: bolder;
 		font-size: 18px;
 		text-shadow: rgba(0, 0, 0, 0.687) 0.1em 0.1em 0.3em;
@@ -495,6 +495,7 @@
 		height: 25px;
 		padding: 3px 10px;
 		font-family: 'Montserrat';
+		text-align: center;
 		display: flex;
 		align-items: center;
 		cursor: pointer;
@@ -557,5 +558,67 @@
 		transition: 0.15s;
 		background-color: #9b9694;
 		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	}
+	@media (max-width: 1000px) {
+		.crud-clubs-team-squad input {
+			width: 70%;
+		}
+	}
+	@media (max-width: 840px) {
+		.crub-clubs-detail-slot > input {
+			width: 50%;
+		}
+	}
+	@media (max-width: 750px) {
+		.crud-clubs-team-main-info-container {
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-start;
+		}
+		.crud-clubs-team-crest-container {
+			width: 60%;
+		}
+		.crud-clubs-team-details {
+			width: 90%;
+		}
+	}
+	@media (max-width: 600px) {
+		.crud-clubs-team-squad {
+			overflow-y: scroll;
+		}
+		.crud-clubs-active-competition-details th {
+			font-size: 12px;
+		}
+		.crud-clubs-active-competition-details input {
+			width: 70%;
+			margin: 0px 2px;
+		}
+		.crud-clubs-team-squad-table-head {
+			font-size: 12px;
+			width: 180%;
+			margin: 0px 2px;
+		}
+		.crud-clubs-team-squad input {
+			width: 70px;
+			margin: 0px 2px;
+		}
+	}
+	@media (max-width: 460px) {
+		main {
+			width: 95%;
+			box-sizing: border-box;
+		}
+		.crud-clubs-team-crest-container {
+			width: 85%;
+		}
+		.crud-clubs-team-details {
+			width: 100%;
+		}
+		.crub-clubs-detail-slot > input {
+			width: 30%;
+		}
+		.crud-clubs-active-competition-details {
+			overflow-y: scroll;
+		}
 	}
 </style>
