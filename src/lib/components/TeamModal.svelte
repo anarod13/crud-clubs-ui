@@ -143,6 +143,7 @@
 		if (team.tla.length >= 3 && team.name.length >= 3) isTeamValid = true;
 		else {
 			isTeamValid = false;
+			showAlertModal('invalidTeam');
 		}
 	}
 </script>
@@ -182,9 +183,9 @@
 				{/if}
 			</div>
 			<div class="crud-clubs-team-details">
-				{#if $editableTeam}
+				{#if $newTeam}
 					<label class="crub-clubs-detail-slot"
-						>Name: <input
+						>Name*: <input
 							name="name"
 							type="text"
 							on:change={() => {
@@ -202,7 +203,7 @@
 					/></label
 				>
 				<label class="crub-clubs-detail-slot"
-					>TLA: <input
+					>TLA*: <input
 						name="tla"
 						type="text"
 						readonly={!$newTeam}
@@ -358,7 +359,7 @@
 			><button
 				type="button"
 				class="crud-clubs-btn save-btn"
-				disabled={!isTeamValid}
+				disabled={!isTeamValid || !$editableTeam}
 				on:click={() => {
 					handleSaveTeam(team);
 				}}><img class="crud-clubs-btn-icon" src={saveIcon} alt="Save" /></button

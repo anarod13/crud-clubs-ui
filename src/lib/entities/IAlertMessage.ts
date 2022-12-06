@@ -4,4 +4,5 @@ export default interface IAlertMessage {
 	crestAdded: string;
 	deletedTeam: string;
 	error: string;
+	invalidTeam: string;
 }

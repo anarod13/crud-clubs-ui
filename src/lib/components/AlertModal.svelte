@@ -9,7 +9,8 @@
 		teamEdited: 'Changes in team saved!',
 		crestAdded: 'Crest updated!',
 		deletedTeam: 'Team successfully deleted!',
-		error: 'Something came up, please try again!'
+		error: 'Something came up, please try again!',
+		invalidTeam: 'You must at least add a Name and a TLA'
 	};
 
 	$alertMessage = 'error';
