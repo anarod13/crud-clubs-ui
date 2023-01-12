@@ -33,11 +33,10 @@ If instead you wanna run it locally, take a look at the following instructions
 
 ## ENV vars
 
-You simply have to set the URL from the API you want to use, in this case we're using 
+You simply have to set the URL from the API you want to use, in this case we're using: 
+VITE_SERVER_URL=https://crud-clubs-api.onrender.com`
+
 ```
-VITE_SERVER_URL=https://crud-clubs-api.onrender.com 
-
-
 ## Folder structure
 
     ├── cypress                 # Cypress tests
